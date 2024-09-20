@@ -1,0 +1,22 @@
+This is folder structure of the project
+
+SHOPEASE/
+│
+├── manage.py
+├── shopease/
+│   ├── __init__.py
+│   ├── settings.py
+│   ├── urls.py
+│   ├── wsgi.py
+│   ├── asgi.py
+│
+├── inventory/
+│   ├── login
+│
+├── Consumer/
+│
+├── static/
+│
+├── templates/
+│
+└── media/
