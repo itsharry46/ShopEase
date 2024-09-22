@@ -11,12 +11,10 @@ SHOPEASE/
 │   ├── asgi.py
 │
 ├── inventory/
-│   ├── login
+|   ├── static/
+|   ├── templates/
+|   ├── login/
 │
 ├── Consumer/
-│
-├── static/
-│
-├── templates/
 │
 └── media/

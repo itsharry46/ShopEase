@@ -2,5 +2,6 @@ from django.urls import path, include
 from inventory import views
 
 urlpatterns = [
-    path('', views.index, name='login')
+    path('', views.inventory_login, name='inventory_login'),
+    path('dashboard/', include('inventory.dashboard.urls')),
 ]

@@ -5,7 +5,10 @@ class Role(models.Model):
     
     class Meta:
         db_table = 'se_role'
-        indexes = []
+        indexes = [
+            models.Index(fields=['role_status']),
+            models.Index(fields=['is_deleted']),
+        ]
 
     ROLE_STATUS_CHOICES = [
         ('Y', 'Active'),
@@ -15,6 +18,7 @@ class Role(models.Model):
     role_id = models.AutoField(primary_key=True)
     role_name = models.CharField(max_length=50, unique=True)
     role_status = models.CharField(max_length=1, choices=ROLE_STATUS_CHOICES, default='Y')
+    is_deleted = models.BooleanField(default=False)
     updated_at = models.DateTimeField(auto_now=True)
 
 
@@ -25,7 +29,9 @@ class User(models.Model):
         indexes = [
             models.Index(fields=['user_email']),
             models.Index(fields=['user_username']),
-            models.Index(fields=['user_role']),
+            models.Index(fields=['user_password']),
+            models.Index(fields=['user_status']),
+            models.Index(fields=['is_deleted']),
             models.Index(fields=['updated_at']),
         ]
 
@@ -40,8 +46,9 @@ class User(models.Model):
     user_email = models.EmailField(max_length=250, unique=True)
     user_username = models.CharField(max_length=100)
     user_password = models.CharField(max_length=128)
-    user_role = models.ForeignKey('Role', on_delete=models.SET_NULL, null=True)
+    user_role_id = models.ForeignKey('Role', on_delete=models.SET_NULL, null=True, db_column='user_role_id')
     user_status = models.CharField(max_length=1, choices=USER_STATUS_CHOICES, default='Y')
+    is_deleted = models.BooleanField(default=False)
     updated_by = models.IntegerField()
     updated_at = models.DateTimeField(auto_now=True)
 
