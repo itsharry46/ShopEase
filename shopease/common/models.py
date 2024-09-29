@@ -1,6 +1,25 @@
 from django.db import models
 
 # Common Application Models
+class Module(models.Model):
+
+    class Meta:
+        db_table = 'se_module'
+        indexes = [
+            models.Index(fields=['is_active']),
+        ]
+    
+    MODULE_STATUS_CHOCIES = [
+        ('Y', 'Active'),
+        ('N', 'Inactive')
+    ]
+
+    module_id = models.AutoField(primary_key=True)
+    module_name = models.CharField(max_length=100, unique=True)
+    module_status = models.CharField(max_length=1, choices=MODULE_STATUS_CHOCIES, default='Y')
+    updated_at = models.DateTimeField(auto_now=True)
+
+
 class Role(models.Model):
     
     class Meta:
@@ -19,6 +38,27 @@ class Role(models.Model):
     role_name = models.CharField(max_length=50, unique=True)
     role_status = models.CharField(max_length=1, choices=ROLE_STATUS_CHOICES, default='Y')
     is_deleted = models.BooleanField(default=False)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+class SubModule(models.Model):
+    
+    class Meta:
+        db_table = 'se_sub_module'
+        indexes = [
+            models.Index(fields=['sub_module_module_id']),
+            models.Index(fields=['sub_module_status'])
+        ]
+    
+    SUB_MODULE_STATUS_CHOICES = [
+        ('Y', 'Active'),
+        ('N', 'Inactive')
+    ]
+
+    sub_module_id = models.AutoField(primary_key=True)
+    sub_module_name = models.CharField(max_length=100, unique=True)
+    sub_module_module_id = models.ForeignKey('Module', on_delete=models.SET_NULL, null=True, db_column='sub_module_module_id')
+    sub_module_status = models.CharField(max_length=1, choices=SUB_MODULE_STATUS_CHOICES)
     updated_at = models.DateTimeField(auto_now=True)
 
 

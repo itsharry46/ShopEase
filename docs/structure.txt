@@ -3,6 +3,21 @@ This is folder structure of the project
 SHOPEASE/
 │
 ├── manage.py
+├── common/
+|
+├── inventory/
+|   ├── static/
+|   │   ├── css
+|   |   └── js
+|   |
+|   ├── templates/
+|   │   ├──dashboard/
+|   │   └── index.html/
+|   │
+|   ├── dashboard/
+|
+├── media/
+|
 ├── shopease/
 │   ├── __init__.py
 │   ├── settings.py
@@ -10,11 +25,4 @@ SHOPEASE/
 │   ├── wsgi.py
 │   ├── asgi.py
 │
-├── inventory/
-|   ├── static/
-|   ├── templates/
-|   ├── login/
-│
-├── Consumer/
-│
-└── media/
+└── theme/
