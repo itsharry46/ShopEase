@@ -1,14 +1,8 @@
-{% extends 'inventory_base.html' %} 
-{% load static %} 
-{% block title %}Inventory | Dashboard{% endblock %} 
-{% block page_css %}
-  <link rel="stylesheet" type="text/css" href="{% static 'css/dashboard.css' %}" />
-{% endblock %} 
+{% extends 'inventory_base.html' %} {% load static %} {% block title %}Inventory | Product Dashboard{% endblock %} {% block page_css %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/dashboard.css' %}" />
+{% endblock %} {% block content %}
 
-{% block content %}
+<h2>Welcome to My Django Site</h2>
+<p>This is the homepage.</p>
 
-  <h2>Welcome to My Django Site</h2>
-  <p>This is the homepage.</p>
-
-  
 {% endblock %}
