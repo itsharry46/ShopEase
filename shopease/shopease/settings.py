@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 import os
 from pathlib import Path
+from datetime import datetime
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-y2++nlo2y)b_pipdxkxjy)zvaaef=s5_g-uqvtv*_=cx2pumr+'
+SECRET_KEY = 'django-insecure-ktjxwssxz0c130b7(0o_vo-orzzx%v@2)5o)vob7g#mva=pb6x'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -33,20 +34,14 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'django.contrib.admin',
-    'django.contrib.auth',          # Required for authentication
+    'django.contrib.auth',
     'django.contrib.contenttypes',
-    'django.contrib.sessions',      # Required for session management
+    'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'tailwind',                     # Tailwind CSS
-    'theme',                        # Tailwind CSS folder name
     'common',
-    'inventory',
+    'inventory'
 ]
-
-TAILWIND_APP_NAME = 'theme'
-INTERNAL_IPS = ['127.0.0.1']
-NPM_BIN_PATH = '/usr/local/bin/npm'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -63,7 +58,9 @@ ROOT_URLCONF = 'shopease.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, '../templates')
+            ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -88,7 +85,7 @@ DATABASES = {
         'NAME': 'shopease',
         'USER': 'root',
         'PASSWORD': '',
-        'HOST':'',
+        'HOST':'localhost',
         'PORT':'3306',
     }
 }
@@ -128,13 +125,56 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = '/static/'
-# Additional locations of static files
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "inventory/static"),
-]
+STATIC_URL = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Logger Configurations
+def get_logging_config(module_name): 
+    # Get the current date and time
+    current_datetime = datetime.now()
+
+    # Extract the day, month, and year
+    current_day = current_datetime.strftime('%d')
+    current_month = current_datetime.strftime('%m')
+    current_year = current_datetime.strftime('%Y')
+
+    LOG_DIR = os.path.join(BASE_DIR, f"../log/{current_year}/{current_month}/{current_day}")
+    if not os.path.exists(LOG_DIR):
+        os.makedirs(LOG_DIR)
+
+    return {
+        "version": 1,
+        "disable_existing_loggers": True,
+        "formatters": {
+            "verbose": {
+                "format": "{levelname} {asctime} {module} {lineno} {message}",
+                "style": "{",
+            }
+        },
+        "filters": {
+            "require_debug_true": {
+                "()": "django.utils.log.RequireDebugTrue",
+            }
+        },
+        "handlers": {
+            "django": {
+                "level": "DEBUG",
+                "filters": ["require_debug_true"],
+                "class": "logging.handlers.RotatingFileHandler",
+                "formatter": "verbose",
+                "filename": os.path.join(BASE_DIR, f"{LOG_DIR}/{module_name}.log"),
+                "maxBytes": 10 * 1024 * 1024,    # Max 10 MB
+                "encoding": "utf-8"
+            }
+        },
+        "loggers": {
+            module_name : {
+                "handlers": ["django"],
+                "propagate": True,
+            }
+        },
+    }
