@@ -1,0 +1,155 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="light-style customizer-hide" dir="ltr" data-theme="theme-default" data-template="vertical-menu-template-free">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+        <title>{% block main_title %}{% endblock %}</title>
+        <meta name="description" content="" />
+
+        <!-- Favicon -->
+        <link rel="icon" type="image/x-icon" href="#" />
+
+        <!-- Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet" />
+
+        <!-- Icons. Uncomment required icon fonts -->
+        <link rel="stylesheet" href="{% static "inventory/vendor/fonts/boxicons.css" %}" />
+
+        <!-- Core CSS -->
+        <link rel="stylesheet" href="{% static "inventory/vendor/css/core.css" %}" class="template-customizer-core-css"> 
+        <link rel="stylesheet" href="{% static "inventory/vendor/css/theme-default.css" %}" class="template-customizer-theme-css"> 
+        <link rel="stylesheet" href="{% static "inventory/css/demo.css" %}">
+
+        <!-- Vendors CSS -->
+        <link rel="stylesheet" href="{% static "inventory/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" %}">
+        <link rel="stylesheet" href="{% static "inventory/vendor/libs/select2/select2.css" %}">
+
+        <link rel="stylesheet" href="{% static "inventory/vendor/libs/datatables-bs5/datatables.bootstrap5.css" %}">
+        <link rel="stylesheet" href="{% static "inventory/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css" %}">
+        <link rel="stylesheet" href="{% static "inventory/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css" %}">
+        
+        <link rel="stylesheet" href="{% static "inventory/vendor/libs/dropzone/dropzone.css" %}">
+        <link rel="stylesheet" href="{% static "inventory/vendor/libs/tagify/tagify.css" %}">
+
+        <!-- Page CSS -->
+        <link rel="stylesheet" href="{% static "inventory/vendor/css/pages/page-auth.css" %}">
+
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="{% static "inventory/css/custom/main.css" %}">
+        {% block main_css%}{% endblock %}
+
+        <!-- Helpers -->
+        <script src="{% static "inventory/vendor/js/helpers.js" %}"></script>        
+
+        <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
+        <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
+        <script src="{% static "inventory/js/config.js" %}"></script>
+    </head>
+
+    <body>
+        {% if not request.session.user_logged_in %}
+
+            <!-- Non-Login Content -->
+            <div class="container-xxl">
+                {% block main_content %}{% endblock %}
+            </div>
+            <!-- Non-Login Content Ends -->
+    
+        {% else %}
+
+            <!-- Login Content -->  
+            <div class="layout-wrapper layout-content-navbar">
+                <div class="layout-container">
+
+					<!-- Navbar -->
+                    <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+                        <div class="app-brand demo">
+							<a href="index.html" class="app-brand-link">
+								<!-- Logo Missing -->
+								<span class="app-brand-text demo menu-text fw-bolder ms-2">Sneat</span>
+							</a>
+							
+							<a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+								<i class="bx bx-chevron-left bx-sm align-middle"></i>
+							</a>
+                        </div>
+
+                        <div class="menu-inner-shadow"></div>
+                        
+                        <ul class="menu-inner py-1" id="menu-toggle">
+                            
+                            {% for artifacts in request.session.user_artifacts %}
+							<li class="menu-item {% if artifacts.module_name == active_menu_item %}active{% endif %}">
+                                <a href="{{ artifacts.module_link }}" class="menu-link">
+                                    <i class="menu-icon tf-icons bx {{ artifacts.module_icon }}"></i>
+                                <div data-i18n="Analytics">{{ artifacts.module_name }}</div>
+                                </a>
+                            </li>
+                            {% endfor %}
+
+                        </ul>
+                    </aside>
+                    <!-- Navbar Ends -->
+
+                    <!-- Main Content -->
+                    <div class="content-wrapper">
+                        {% block main_logged_in_content %}{% endblock %}
+            
+                        <!-- Footer -->
+                        {% comment %} <footer class="content-footer footer bg-footer-theme">
+                            <div class="container-fluid d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
+                                <div class="mb-2 mb-md-0"> © 
+                                    <script>document.write(new Date().getFullYear());</script>, made with ❤️ by
+                                    <a href="https://themeselection.com" target="_blank" class="footer-link fw-bolder">ThemeSelection</a>
+                                </div>
+                                <div>
+                                    <a href="https://themeselection.com/license/" class="footer-link me-4" target="_blank">License</a>
+                                    <a href="https://themeselection.com/" target="_blank" class="footer-link me-4">More Themes</a>
+                                    <a href="https://themeselection.com/demo/sneat-bootstrap-html-admin-template/documentation/" target="_blank" class="footer-link me-4">Documentation</a>
+                                    <a href="https://github.com/themeselection/sneat-html-admin-template-free/issues" target="_blank" class="footer-link me-4">Support</a>
+                                </div>
+                            </div>
+                        </footer> {% endcomment %}
+                        <!-- Footer Ends -->
+            
+                        <div class="content-backdrop fade"></div>
+                    </div>
+                    <!-- Main Content Ends -->
+					
+                </div>
+				<!-- Overlay -->
+				<div class="layout-overlay layout-menu-toggle"></div>
+            </div>
+            <!-- Login Content Ends -->
+
+        {% endif %}
+
+        <!-- Core JS -->
+        <!-- build:js invenotry/vendor/js/core.js -->
+        <script src="{% static "inventory/vendor/libs/jquery/jquery.js" %}" ></script> 
+        <script src="{% static "inventory/vendor/libs/popper/popper.js" %}" ></script> 
+        <script src="{% static "inventory/vendor/js/bootstrap.js" %}" ></script> 
+        <script src="{% static "inventory/vendor/libs/perfect-scrollbar/perfect-scrollbar.js" %}" ></script>
+        <script src="{% static "inventory/vendor/js/menu.js" %}" ></script>
+        <!-- endbuild -->
+
+        <!-- Vendor JS -->
+        <script src="{% static "inventory/vendor/libs/datatables-bs5/datatables-bootstrap5.js" %}"></script>
+        <script src="{% static "inventory/vendor/libs/select2/select2.js" %}"></script>
+        <script src="{% static "inventory/vendor/libs/dropzone/dropzone.js" %}"></script>
+        <script src="{% static "inventory/vendor/libs/tagify/tagify.js" %}"></script>
+        <script src="{% static "inventory/vendor/libs/jquery-repeater/jquery-repeater.js" %}"></script>
+
+        <!-- Main JS -->
+        <script src="{% static "inventory/js/main.js" %}"></script>
+
+        <!-- Page JS -->
+        {% block main_page_js %}{% endblock %}
+
+        <!-- Place this tag in your head or just before your close body tag. -->
+        <script async defer src="https://buttons.github.io/buttons.js"></script>
+    </body>
+</html>
