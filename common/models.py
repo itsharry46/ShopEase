@@ -50,6 +50,26 @@ class Artifact(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 
+class Category(models.Model):
+
+    class Meta:
+        db_table = 'se_category'
+        indexes = [
+            models.Index(fields=['category_status'])
+        ]
+
+    CATEGORY_STATUS_CHOICES = [
+        ('Y', 'Active'),
+        ('N', 'Active')
+    ]
+
+    category_id = models.AutoField(primary_key=True)
+    category_name = models.CharField(max_length=100, unique=True)
+    category_description = models.CharField(max_length=100, null=True)
+    category_status = models.CharField(max_length=1, choices=CATEGORY_STATUS_CHOICES, default='Y')
+    updated_at = models.DateTimeField(auto_now=True)
+
+
 class Module(models.Model):
     
     class Meta:
@@ -70,6 +90,42 @@ class Module(models.Model):
     module_icon = models.CharField(max_length=250)
     module_link = models.CharField(max_length=250, null=True)
     module_status = models.CharField(max_length=1, choices=MODULE_STATUS_CHOICES, default='Y')
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+class Product(models.Model):
+
+    class Meta:
+        db_table = 'se_product'
+        indexes = [
+            models.Index(fields=['product_name']),
+            models.Index(fields=['product_tax_status']),
+            models.Index(fields=['product_status'])
+        ]
+
+    PRODUCT_TAX_STATUS_CHOICES = [
+        ('Y', 'Active'),
+        ('N', 'Inactive')
+    ]
+
+    PRODUCT_STATUS_CHOICES = [
+        ('Y', 'Active'),
+        ('N', 'Inactive')
+    ]
+    
+    product_id = models.AutoField(primary_key=True)
+    product_category_id = models.ForeignKey('Category', on_delete=models.PROTECT, null=True, db_column='product_category_id')
+    product_name = models.CharField(max_length=250)
+    product_sku = models.IntegerField()
+    product_barcode = models.CharField(max_length=50, null=True)
+    product_description = models.TextField(null=True)
+    product_image = models.BinaryField()
+    product_variants = models.JSONField(null=True)
+    product_price = models.IntegerField()
+    product_discount_price = models.IntegerField()
+    product_tax_status = models.CharField(max_length=1, choices=PRODUCT_TAX_STATUS_CHOICES, default='Y')
+    product_stock = models.IntegerField()
+    product_status = models.CharField(max_length=1, choices=PRODUCT_STATUS_CHOICES, default='Y')
     updated_at = models.DateTimeField(auto_now=True)
 
 

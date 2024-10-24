@@ -19,7 +19,7 @@
                         <div>
                             <div id="DataTables_Table_0_filter" class="dataTables_filter me-3 mb-sm-6 mb-0 ps-0">
                                 <label>
-                                    <input type="search" class="form-control ms-0" placeholder="Search Category" aria-controls="DataTables_Table_0">
+                                    <input type="search" class="form-control ms-0" id="search_category" placeholder="Search Category" aria-controls="DataTables_Table_0">
                                 </label>
                             </div>
                         </div>
@@ -36,7 +36,8 @@
                             </div>
                         </div>
                     </div>
-
+                    
+                    {% if category_list %}
                     <table class="datatables-category-list table border-top dataTable no-footer dtr-column" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info" style="width: 1354px;">
                         <thead>
                             <tr>
@@ -48,245 +49,47 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="odd">
-                                <td class="  control" tabindex="0" style="display: none;"></td>
-                                <td class="">
-                                    <div class="d-flex align-items-center">
-                                        <div class="d-flex flex-column justify-content-center">
-                                            <span class="text-heading text-wrap fw-medium">Smart Phone</span>
-                                            <span class="text-truncate mb-0 d-none d-sm-block">
-                                                <small>Choose from wide range of smartphones from popular brands</small>
-                                            </span>
+                            {% for category in category_list %}
+                                <tr>
+                                    <td class="  control" tabindex="0" style="display: none;"></td>
+                                    <td class="">
+                                        <div class="d-flex align-items-center">
+                                            <div class="d-flex flex-column justify-content-center">
+                                                <span class="text-heading text-wrap fw-medium">{{ category.category_name }}</span>
+                                                <span class="text-truncate mb-0 d-none d-sm-block">
+                                                    <small>{{ category.category_description }}</small>
+                                                </span>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                                <td class="sorting_1">
-                                    <div class="text-sm-end">1947</div>
-                                </td>
-                                <td>
-                                    <div class="d-flex align-items-sm-center justify-content-sm-center">
-                                        <button class="btn btn-icon">
-                                            <i class="bx bx-edit bx-md"></i>
-                                        </button>
-                                        <button class="btn btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                            <i class="bx bx-dots-vertical-rounded bx-md"></i>
-                                        </button>
-                                        <div class="dropdown-menu dropdown-menu-end m-0">
-                                            <a href="javascript:0;" class="dropdown-item">View</a>
-                                            <a href="javascript:0;" class="dropdown-item">Suspend</a>
+                                    </td>
+                                    <td class="sorting_1">
+                                        <div class="text-sm-end">{{ category.category_product_count }}</div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-sm-center justify-content-sm-center">
+                                            <button class="btn btn-icon">
+                                                <i class="bx bx-edit bx-md"></i>
+                                            </button>
+                                            <button class="btn btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                                <i class="bx bx-dots-vertical-rounded bx-md"></i>
+                                            </button>
+                                            <div class="dropdown-menu dropdown-menu-end m-0">
+                                                <a href="javascript:0;" class="dropdown-item">View</a>
+                                                <a href="javascript:0;" class="dropdown-item">Suspend</a>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr class="even">
-                                <td class="  control" tabindex="0" style="display: none;"></td>
-                                <td class="">
-                                    <div class="d-flex align-items-center">
-                                        <div class="d-flex flex-column justify-content-center">
-                                            <span class="text-heading text-wrap fw-medium">Clocks</span>
-                                            <span class="text-truncate mb-0 d-none d-sm-block">
-                                                <small>Choose from wide range of clocks from popular brands</small>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="sorting_1">
-                                    <div class="text-sm-end">2954</div>
-                                </td>
-                                <td>
-                                    <div class="d-flex align-items-sm-center justify-content-sm-center">
-                                        <button class="btn btn-icon">
-                                            <i class="bx bx-edit bx-md"></i>
-                                        </button>
-                                        <button class="btn btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                            <i class="bx bx-dots-vertical-rounded bx-md"></i>
-                                        </button>
-                                        <div class="dropdown-menu dropdown-menu-end m-0">
-                                            <a href="javascript:0;" class="dropdown-item">View</a>
-                                            <a href="javascript:0;" class="dropdown-item">Suspend</a>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr class="odd">
-                                <td class="  control" tabindex="0" style="display: none;"></td>
-                                <td class="">
-                                    <div class="d-flex align-items-center">
-                                        <div class="d-flex flex-column justify-content-center">
-                                            <span class="text-heading text-wrap fw-medium">Travel</span>
-                                            <span class="text-truncate mb-0 d-none d-sm-block">
-                                                <small>Choose from wide range of travel accessories from popular brands</small>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="sorting_1">
-                                    <div class="text-sm-end">4186</div>
-                                </td>
-                                <td>
-                                    <div class="d-flex align-items-sm-center justify-content-sm-center">
-                                        <button class="btn btn-icon">
-                                            <i class="bx bx-edit bx-md"></i>
-                                        </button>
-                                        <button class="btn btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="bx bx-dots-vertical-rounded bx-md"></i>
-                                        </button>
-                                        <div class="dropdown-menu dropdown-menu-end m-0" style="">
-                                            <a href="javascript:0;" class="dropdown-item">View</a>
-                                            <a href="javascript:0;" class="dropdown-item">Suspend</a>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr class="even">
-                                <td class="  control" tabindex="0" style="display: none;"></td>
-                                <td class="">
-                                    <div class="d-flex align-items-center">
-                                        <div class="d-flex flex-column justify-content-center">
-                                            <span class="text-heading text-wrap fw-medium">Jewellery</span>
-                                            <span class="text-truncate mb-0 d-none d-sm-block">
-                                                <small>Choose from wide range of Jewellery from popular brands</small>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="sorting_1">
-                                    <div class="text-sm-end">4186</div>
-                                </td>
-                                <td>
-                                    <div class="d-flex align-items-sm-center justify-content-sm-center">
-                                        <button class="btn btn-icon">
-                                            <i class="bx bx-edit bx-md"></i>
-                                        </button>
-                                        <button class="btn btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                            <i class="bx bx-dots-vertical-rounded bx-md"></i>
-                                        </button>
-                                        <div class="dropdown-menu dropdown-menu-end m-0">
-                                            <a href="javascript:0;" class="dropdown-item">View</a>
-                                            <a href="javascript:0;" class="dropdown-item">Suspend</a>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr class="odd">
-                                <td class="  control" tabindex="0" style="display: none;"></td>
-                                <td class="">
-                                    <div class="d-flex align-items-center">
-                                        <div class="d-flex flex-column justify-content-center">
-                                            <span class="text-heading text-wrap fw-medium">Grocery</span>
-                                            <span class="text-truncate mb-0 d-none d-sm-block">
-                                                <small>Get fresh groceries delivered at your doorstep</small>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="sorting_1">
-                                    <div class="text-sm-end">4186</div>
-                                </td>
-                                <td>
-                                    <div class="d-flex align-items-sm-center justify-content-sm-center">
-                                        <button class="btn btn-icon">
-                                            <i class="bx bx-edit bx-md"></i>
-                                        </button>
-                                        <button class="btn btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                            <i class="bx bx-dots-vertical-rounded bx-md"></i>
-                                        </button>
-                                        <div class="dropdown-menu dropdown-menu-end m-0">
-                                            <a href="javascript:0;" class="dropdown-item">View</a>
-                                            <a href="javascript:0;" class="dropdown-item">Suspend</a>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr class="even">
-                                <td class="  control" tabindex="0" style="display: none;"></td>
-                                <td class="">
-                                    <div class="d-flex align-items-center">
-                                        <div class="d-flex flex-column justify-content-center">
-                                            <span class="text-heading text-wrap fw-medium">Clothing</span>
-                                            <span class="text-truncate mb-0 d-none d-sm-block">
-                                                <small>Choose from wide range of clothing from popular brands</small>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="sorting_1">
-                                    <div class="text-sm-end">4186</div>
-                                </td>
-                                <td>
-                                    <div class="d-flex align-items-sm-center justify-content-sm-center">
-                                        <button class="btn btn-icon">
-                                            <i class="bx bx-edit bx-md"></i>
-                                        </button>
-                                        <button class="btn btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                            <i class="bx bx-dots-vertical-rounded bx-md"></i>
-                                        </button>
-                                        <div class="dropdown-menu dropdown-menu-end m-0">
-                                            <a href="javascript:0;" class="dropdown-item">View</a>
-                                            <a href="javascript:0;" class="dropdown-item">Suspend</a>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr class="odd">
-                                <td class="  control" tabindex="0" style="display: none;"></td>
-                                <td class="">
-                                    <div class="d-flex align-items-center">
-                                        <div class="d-flex flex-column justify-content-center">
-                                            <span class="text-heading text-wrap fw-medium">Books</span>
-                                            <span class="text-truncate mb-0 d-none d-sm-block">
-                                                <small>Dive into world of books from Top authors</small>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="sorting_1">
-                                    <div class="text-sm-end">4186</div>
-                                </td>
-                                <td>
-                                    <div class="d-flex align-items-sm-center justify-content-sm-center">
-                                        <button class="btn btn-icon">
-                                            <i class="bx bx-edit bx-md"></i>
-                                        </button>
-                                        <button class="btn btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                            <i class="bx bx-dots-vertical-rounded bx-md"></i>
-                                        </button>
-                                        <div class="dropdown-menu dropdown-menu-end m-0">
-                                            <a href="javascript:0;" class="dropdown-item">View</a>
-                                            <a href="javascript:0;" class="dropdown-item">Suspend</a>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
+                                    </td>
+                                </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
-                    <div class="row">
-                        <div class="col-sm-12 col-md-6">
-                            <div class="dataTables_info" id="DataTables_Table_0_info" role="status" aria-live="polite">Showing 1 to 7 of 14 entries</div>
-                        </div>
-                        <div class="col-sm-12 col-md-6">
-                            <div class="dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate">
-                                <ul class="pagination">
-                                    <li class="paginate_button page-item previous disabled" id="DataTables_Table_0_previous">
-                                        <a aria-controls="DataTables_Table_0" aria-disabled="true" role="link" data-dt-idx="previous" tabindex="-1" class="page-link">
-                                            <i class="bx bx-chevron-left bx-18px"></i>
-                                        </a>
-                                    </li>
-                                    <li class="paginate_button page-item active">
-                                        <a href="#" aria-controls="DataTables_Table_0" role="link" aria-current="page" data-dt-idx="0" tabindex="0" class="page-link">1</a>
-                                    </li>
-                                    <li class="paginate_button page-item ">
-                                        <a href="#" aria-controls="DataTables_Table_0" role="link" data-dt-idx="1" tabindex="0" class="page-link">2</a>
-                                    </li>
-                                    <li class="paginate_button page-item next" id="DataTables_Table_0_next">
-                                        <a href="#" aria-controls="DataTables_Table_0" role="link" data-dt-idx="next" tabindex="0" class="page-link">
-                                            <i class="bx bx-chevron-right bx-18px"></i>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
+                    {% endif %}
+
+                    {% if category_list_err %}
+                        <hr>
+                        <div class="category_list_err alert alert-primary" role="alert">{{ category_list_err }}</div>
+                    {% endif %}
+
                     <div style="width: 1%;"></div>
                 </div>
             </div>
@@ -466,4 +269,5 @@
 {% endblock %}
 
 {% block main_page_js %}
+<script src="{% static "inventory/js/custom/view_inventory_add_category.js" %}"></script>
 {% endblock %}
