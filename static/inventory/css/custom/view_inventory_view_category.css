@@ -1,0 +1,18 @@
+.category_list_err {
+    width: 50%;
+    text-align: center;
+    margin: auto;
+}
+
+.btn {
+    height: 40px;
+}
+
+.bx-md {
+    font-size: 1.375rem !important;
+}
+
+textarea {
+    resize: none;
+    height: 200px;
+}

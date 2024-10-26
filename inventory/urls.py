@@ -6,5 +6,6 @@ urlpatterns = [
     path('logout/', views.inventory_logout, name='inventory_logout'),
 
     path('dashboard/', include('inventory.dashboard.urls')),
-    path('product/', include('inventory.product.urls'))
+    path('product/', include('inventory.product.urls')),
+    path('category/', include('inventory.category.urls'))
 ]

@@ -1,3 +1,11 @@
+/* Error CSS */
+.custom-error-message {
+    font-size: 12px;
+    font-weight: 600;
+    color: rgb(241, 78, 78);
+}
+/* Error CSS Ends */
+
 /* Floating Input CSS  */
 .form-group {
     position: relative;
@@ -12,6 +20,7 @@
 }
 
 .form-group label {
+    font-size: 13px;
     position: absolute;
     left: 12px;
     top: 10px;
@@ -36,10 +45,35 @@
 }
 /* Floating Input CSS Ends */
 
-/* Error CSS */
-.custom-error-message {
-    font-size: 12px;
-    font-weight: 600;
-    color: rgb(241, 78, 78);
+/* Floating TextArea CSS  */
+.form-group textarea {
+    transition: border-color 0.3s ease;
 }
-/* Error CSS Ends */
+
+.form-group textarea:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+.form-group textarea:focus + label,
+.form-group textarea:not(:placeholder-shown) + label {
+    top: -6px;
+    color: #007bff;
+    background-color: #ffffff;
+    padding: 0 4px;
+    border-radius: 4px;
+    left: 8px;
+}
+/* Floating TextArea CSS Ends */
+
+/* Floating Select2 CSS  */
+.form-group:focus-within .floating-label,
+.form-group .floating-label {
+    top: -6px;
+    color: #007bff;
+    background-color: #ffffff;
+    padding: 0 4px;
+    border-radius: 4px;
+    left: 8px;
+}
+/* Floating Select2 CSS Ends */

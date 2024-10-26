@@ -1,5 +1,4 @@
 from django import forms
-import re
 
 
 class InventoryLoginForm(forms.Form):
@@ -10,7 +9,7 @@ class InventoryLoginForm(forms.Form):
         username = self.cleaned_data.get('username')
 
         if not username:
-            raise forms.ValidationError('Username is required.')\
+            raise forms.ValidationError('Username is required.')
         
         return username
     
