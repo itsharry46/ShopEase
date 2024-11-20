@@ -37,11 +37,19 @@ $(function () {
       show: function () {
         var a = $(this).find(".form-control, .form-select"),
           t = $(this).find(".form-label");
-        a.each(function (e) {
+        a.each(function (index) {
           var r = "form-repeater-" + s + "-" + o;
-          $(a[e]).attr("id", r), $(t[e]).attr("for", r), o++;
-        }),
-          s++,
+          // Check if the ID already exists
+          if ($("#" + r).length === 0) {
+            $(a[index]).attr("id", r);
+            $(t[index]).attr("for", r);
+            o++;
+          } else {
+            // Optionally handle the case where the ID already exists
+            console.warn("ID already exists: " + r);
+          }
+        });
+        s++,
           $(this).slideDown(),
           $(".select2-container").remove(),
           $(".select2.form-select").select2({ placeholder: "Placeholder text" }),

@@ -1,6 +1,7 @@
 from .forms import *
 from .models import *
 from django.shortcuts import render
+from django.http import JsonResponse
 from common.utils import Authentication
 
 
@@ -30,9 +31,10 @@ def inventory_view_category(request):
         # Add Category Form
         categoryForm = InventoryCreateCategoryForm()
         context['category_form'] = categoryForm
+        context['category_form_status'] = False
 
-        if request.method == 'POST':
-            __inventory_add_category(request)
+        # if request.method == 'POST':
+        #     __inventory_add_category(request)
         
         return render(request, 'inventory/view_inventory_view_category.html', context)
 
@@ -40,21 +42,31 @@ def inventory_view_category(request):
         print(ex)
 
 
-def __inventory_add_category(request):
+def inventory_add_category(request):
     try:
+        if request.method == 'POST':
+            context = {}
 
-        form = InventoryCreateCategoryForm(request.POST)
-        if form.is_valid():
-            add_category = {}
-            add_category['category_name'] = form.cleaned_data.get('category_name')
-            add_category['category_description'] = form.cleaned_data.get('category_description')
-            add_category['category_status'] = form.cleaned_data.get('category_status')
+            categoryForm = InventoryCreateCategoryForm(request.POST)
+            if categoryForm.is_valid():
+                add_category = {}
+                add_category['category_name'] = categoryForm.cleaned_data.get('category_name')
+                add_category['category_description'] = categoryForm.cleaned_data.get('category_description')
+                add_category['category_status'] = categoryForm.cleaned_data.get('category_status')
 
-            res_add_category = model_add_category(add_category)
-            if not res_add_category:
-                raise Exception('Failed to add category into database')
+                print(add_category)
+
+                # res_add_category = model_add_category(add_category)
+                # if not res_add_category:
+                #     raise Exception('Failed to add category into database')
+                
+                # return res_add_category
             
-            return res_add_category
-        
+            else:
+                context['category_form'] = categoryForm
+                context['category_form_status'] = True
+
+                return JsonResponse({'context': True})
+
     except Exception as ex:
         print(ex)
