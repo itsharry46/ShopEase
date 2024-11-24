@@ -26,7 +26,7 @@
                         <div class="d-flex justify-content-center justify-content-md-end align-items-baseline">
                             <div class="dt-action-buttons d-flex justify-content-center flex-md-row align-items-baseline pt-0">
                                 <div class="dt-buttons btn-group flex-wrap">
-                                    <button class="btn btn-secondary add-new btn-primary ms-2" tabindex="0" aria-controls="DataTables_Table_0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasEcommerceCategoryList">
+                                    <button class="btn btn-secondary add-new btn-primary ms-2" id="addCategoryList" tabindex="0" aria-controls="DataTables_Table_0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasEcommerceCategoryList">
                                         <span>
                                             <i class="bx bx-plus bx-sm me-0 me-sm-2"></i>
                                             <span class="d-none d-sm-inline-block">Add Category</span>
@@ -104,4 +104,5 @@
 
 {% block main_page_js %}
 <script src="{% static "inventory/js/custom/view_inventory_view_category.js" %}"></script>
+<script src="{% static "inventory/js/custom/view_inventory_add_category.js" %}"></script>
 {% endblock %}

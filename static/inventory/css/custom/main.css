@@ -6,6 +6,13 @@
 }
 /* Error CSS Ends */
 
+/* Success CSS */
+.custom-success-message {
+    font-size: 12px;
+    font-weight: 600;
+    color: rgb(35 202 23);
+}
+/* Success CSS Ends */
 /* Floating Input CSS  */
 .form-group {
     position: relative;

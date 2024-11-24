@@ -17,35 +17,21 @@
 
     <!-- Offcanvas Body -->
     <div class="offcanvas-body border-top" data-select2-id="8">
-        <form class="pt-0 fv-plugins-bootstrap5 fv-plugins-framework" id="eCommerceCategoryListForm" onsubmit="return true" novalidate="novalidate" method="POST" hx-post="{% url 'inventory_add_category' %}">
+        <form class="pt-0 fv-plugins-bootstrap5 fv-plugins-framework" id="eCommerceCategoryListForm" onsubmit="return true" novalidate="novalidate" method="POST">
             {% csrf_token %}
 
             <!-- Name -->
             <div class="mb-6 fv-plugins-icon-container form-group">
                 <input type="text" class="form-control" id="category_name" name="category_name" placeholder=" " autofocus value="{{ category_form.category_name.value | default_if_none:'' }}">
                 <label for="category_name" class="form-label">{{ category_form.category_name.label }}</label>
-
-                {% if context %}
-                    <p>Test Method</p>
-                {% endif %}
-
-                {% if category_form.category_name.errors %}
-                    {% for error in category_form.category_name.errors %}
-                        <p class="custom-error-message mt-1">{{ error }}</p>
-                    {% endfor %}
-                {% endif %}
+                <p id="category_name_error" class="custom-error-message mt-1"></p>
             </div>
             
             <!-- Description -->
             <div class="mb-6 form-group">
                 <textarea class="form-control" id="category_description" name="category_description" placeholder=" " autofocus value="{{ category_form.category_description.value | default_if_none:'' }}"></textarea>
                 <label for="category_description" class="mb-1">{{ category_form.category_description.label }}</label>
-
-                {% if category_form.category_description.errors %}
-                    {% for error in category_form.category_description.errors %}
-                        <p class="custom-error-message mt-1">{{ error }}</p>
-                    {% endfor %}
-                {% endif %}
+                <p id="category_description_error" class="custom-error-message mt-1"></p>
             </div>
 
             <!-- Status -->
@@ -56,18 +42,15 @@
                     {% endfor %}
                 </select>
                 <label id="category-status-label" for="category_status" class="">{{ category_form.category_status.label }}</label>
-
-                {% if category_form.category_status.errors %}
-                    {% for error in category_form.category_status.errors %}
-                        <p class="custom-error-message mt-1">{{ error }}</p>
-                    {% endfor %}
-                {% endif %}
+                <p id="category_status_error" class="custom-error-message mt-1"></p>
             </div>
             
             <!-- Submit and reset -->
             <div class="mb-6">
-                <button type="submit" class="btn btn-primary me-sm-3 me-1 data-submit">Add</button>
-                <button type="reset" class="btn btn-label-danger" data-bs-dismiss="offcanvas">Discard</button>
+                <button type="submit" id="submit_add_category" class="btn btn-primary me-sm-3 me-1 data-submit">Add</button>
+                <button type="reset" id="reset_add_category" class="btn btn-label-danger" data-bs-dismiss="offcanvas">Discard</button>
+
+                <p id="add_category_response" class="custom-success-message mt-3"></p>
             </div>
             <input type="hidden">
         </form>
@@ -79,6 +62,7 @@
     
     {% block main_page_js %}
         <script src="{% static "inventory/js/custom/view_inventory_view_category.js" %}"></script>
+        <script src="{% static "inventory/js/custom/view_inventory_add_category.js" %}"></script>
     {% endblock %}
 
 {% endif %}

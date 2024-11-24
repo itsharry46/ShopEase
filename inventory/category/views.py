@@ -1,6 +1,6 @@
 from .forms import *
 from .models import *
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from common.utils import Authentication
 
@@ -41,11 +41,10 @@ def inventory_view_category(request):
     except Exception as ex:
         print(ex)
 
-
+@Authentication.inventory_login_decorator
 def inventory_add_category(request):
     try:
         if request.method == 'POST':
-            context = {}
 
             categoryForm = InventoryCreateCategoryForm(request.POST)
             if categoryForm.is_valid():
@@ -54,19 +53,18 @@ def inventory_add_category(request):
                 add_category['category_description'] = categoryForm.cleaned_data.get('category_description')
                 add_category['category_status'] = categoryForm.cleaned_data.get('category_status')
 
-                print(add_category)
-
-                # res_add_category = model_add_category(add_category)
-                # if not res_add_category:
-                #     raise Exception('Failed to add category into database')
+                res_add_category = model_add_category(add_category)
+                if not res_add_category:
+                    raise Exception('Failed to add category into database')
                 
-                # return res_add_category
+                result = {}
+                result['message'] = 'New Category Created Successfully!'
+
+                return JsonResponse(result, status=200)
             
             else:
-                context['category_form'] = categoryForm
-                context['category_form_status'] = True
+                return JsonResponse(categoryForm.errors, status=400)
 
-                return JsonResponse({'context': True})
 
     except Exception as ex:
         print(ex)
