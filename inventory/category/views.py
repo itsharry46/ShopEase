@@ -1,3 +1,4 @@
+import json
 from .forms import *
 from .models import *
 from django.shortcuts import render, redirect
@@ -33,9 +34,6 @@ def inventory_view_category(request):
         context['category_form'] = categoryForm
         context['category_form_status'] = False
 
-        # if request.method == 'POST':
-        #     __inventory_add_category(request)
-        
         return render(request, 'inventory/view_inventory_view_category.html', context)
 
     except Exception as ex:
@@ -45,8 +43,9 @@ def inventory_view_category(request):
 def inventory_add_category(request):
     try:
         if request.method == 'POST':
+            body = json.loads(request.body)
 
-            categoryForm = InventoryCreateCategoryForm(request.POST)
+            categoryForm = InventoryCreateCategoryForm(body)
             if categoryForm.is_valid():
                 add_category = {}
                 add_category['category_name'] = categoryForm.cleaned_data.get('category_name')
@@ -58,10 +57,67 @@ def inventory_add_category(request):
                     raise Exception('Failed to add category into database')
                 
                 result = {}
-                result['message'] = 'New Category Created Successfully!'
+                result['message'] = 'Category Created Successfully!'
 
                 return JsonResponse(result, status=200)
             
+            else:
+                return JsonResponse(categoryForm.errors, status=400)
+
+
+    except Exception as ex:
+        print(ex)
+
+
+@Authentication.inventory_login_decorator
+def inventory_info_update_category(request):
+    try:
+        if request.method == 'GET':
+            category_id = request.GET.get('category_id')
+            if not category_id:
+                raise Exception('Please connect with developer')
+            
+            res_info_category = model_update_category_information(category_id)
+            if not res_info_category:
+                raise Exception('Failed to fetch category information')
+            
+            result = {}
+            result['category_name'] = res_info_category[0]['category_name']
+            result['category_description'] = res_info_category[0]['category_description']
+            result['category_status'] = res_info_category[0]['category_status']
+
+            return JsonResponse(result, status=200)
+
+    except Exception as ex:
+        print(ex)
+        
+
+@Authentication.inventory_login_decorator
+def inventory_update_category(request):
+    try:
+        if request.method == 'PUT':
+            body = json.loads(request.body)
+
+            categoryForm = InventoryCreateCategoryForm(body)
+            if categoryForm.is_valid():
+                category_id = body.get('category_id')
+                if not category_id:
+                    pass
+
+                update_category = {}
+                update_category['category_name'] = categoryForm.cleaned_data.get('category_name')
+                update_category['category_description'] = categoryForm.cleaned_data.get('category_description')
+                update_category['category_status'] = categoryForm.cleaned_data.get('category_status')
+
+                res_update_category = model_update_category(category_id, update_category)
+                if not res_update_category:
+                    raise Exception('Failed to update category into database')
+                
+                result = {}
+                result['message'] = 'Category Updated Successfully!'
+
+                return JsonResponse(result, status=200)
+
             else:
                 return JsonResponse(categoryForm.errors, status=400)
 

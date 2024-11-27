@@ -34,7 +34,7 @@ class InventoryCreateCategoryForm(forms.Form):
             if len(category_description) == 100:
                 raise forms.ValidationError('Category Description must be less than 100 chars')
             
-            if not bool(re.fullmatch(r"[A-Za-z ]*", category_description)):
+            if not bool(re.fullmatch(r"^[A-Za-z\s,\.]*$", category_description)):
                 raise forms.ValidationError('Category Description only alphabets allowed');
 
         return category_description

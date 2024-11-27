@@ -16,3 +16,7 @@ textarea {
     resize: none;
     height: 200px;
 }
+
+.card-datatable {
+    overflow-x: hidden !important;
+}

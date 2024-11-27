@@ -5,7 +5,7 @@ from django.db.models import Count, Q
 
 def model_get_category_list():
     try:
-        queryset = Category.objects.filter(category_status = 'Y'). \
+        queryset = Category.objects. \
             annotate(product_count=Count('product__product_id')). \
             select_related('product_category_id'). \
             values('category_id', 'category_name', 'category_description', 'product_count')
@@ -30,3 +30,30 @@ def model_add_category(add_category):
         print('model_add_category exception => ', ex)
         return False
 
+
+def model_update_category_information(category_id):
+    try:
+        queryset = Category.objects.filter(category_id = category_id). \
+            values('category_name', 'category_description', 'category_status')
+
+        queryset.first()
+
+        return queryset
+
+    except Exception as ex:
+        print(ex)
+
+def model_update_category(category_id, category_data):
+    try:
+        with transaction.atomic():
+            updated_count = Category.objects.filter(category_id = category_id). \
+                update(**category_data)
+            
+            if updated_count > 0:
+                return True
+            else:
+                raise Exception(f"Failed to update category id {category_id}")
+
+    except Exception as ex:
+        print('model_update_category exception => ', ex)
+        return False

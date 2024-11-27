@@ -17,8 +17,11 @@
 
     <!-- Offcanvas Body -->
     <div class="offcanvas-body border-top" data-select2-id="8">
-        <form class="pt-0 fv-plugins-bootstrap5 fv-plugins-framework" id="eCommerceCategoryListForm" onsubmit="return true" novalidate="novalidate" method="POST">
+        <form class="pt-0 fv-plugins-bootstrap5 fv-plugins-framework" id="eCommerceCategoryListForm" onsubmit="return true" novalidate="novalidate">
             {% csrf_token %}
+
+            <!-- Hidden Tags -->
+            <input type="hidden" id="hidden_category_id" name="hidden_category_id" value="">
 
             <!-- Name -->
             <div class="mb-6 fv-plugins-icon-container form-group">
@@ -48,6 +51,7 @@
             <!-- Submit and reset -->
             <div class="mb-6">
                 <button type="submit" id="submit_add_category" class="btn btn-primary me-sm-3 me-1 data-submit">Add</button>
+                <button type="submit" id="submit_update_category" class="btn btn-primary me-sm-3 me-1 data-submit">Update</button>
                 <button type="reset" id="reset_add_category" class="btn btn-label-danger" data-bs-dismiss="offcanvas">Discard</button>
 
                 <p id="add_category_response" class="custom-success-message mt-3"></p>

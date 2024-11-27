@@ -13,6 +13,10 @@ initialOpen.addEventListener("click", function () {
   document.getElementById("add_category_response").textContent = "";
   document.getElementById("category_name").value = "";
   document.getElementById("category_description").value = "";
+  document.getElementById("hidden_category_id").value = "";
+
+  document.getElementById("submit_add_category").style.removeProperty("display");
+  document.getElementById("submit_update_category").style.setProperty("display", "none", "important");
 
   $("#category_status").select2("val", "Y");
 });
@@ -23,29 +27,81 @@ add_category.addEventListener("click", function (event) {
   event.preventDefault();
   clearAddCategoryErrors();
 
-  var ajax_data = {
+  var fetch_data = {
     category_name: document.getElementById("category_name").value,
     category_description: document.getElementById("category_description").value,
     category_status: document.getElementById("category_status").value,
     csrfmiddlewaretoken: commonGetCSRFToken(), // Include CSRF token
   };
 
-  $.ajax({
-    url: "add_category",
-    type: "POST",
-    data: ajax_data,
-    success: function (response) {
-      console.log(response);
-      document.getElementById("add_category_response").innerText = response.message;
+  fetch("add_category", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRFToken": commonGetCSRFToken(), // Include CSRF token
     },
-    error: function (xhr) {
-      const errors = xhr.responseJSON;
-
-      for (let index = 0; index < Object.keys(errors).length; index++) {
-        document.getElementById(`${Object.keys(errors)[index]}_error`).textContent = Object.values(errors)[index];
+    body: JSON.stringify(fetch_data),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        return response.json().then((errors) => {
+          throw errors;
+        });
       }
+      return response.json();
+    })
+    .then((data) => {
+      document.getElementById("add_category_response").innerText = data.message;
+    })
+    .catch((errors) => {
+      for (let key in errors) {
+        if (errors.hasOwnProperty(key)) {
+          document.getElementById(`${key}_error`).textContent = errors[key];
+        }
+      }
+    });
+});
+
+// AJAX Request for update categroy
+const update_category = document.getElementById("submit_update_category");
+update_category.addEventListener("click", function (event) {
+  event.preventDefault();
+  clearAddCategoryErrors();
+
+  var fetch_data = {
+    category_id: document.getElementById("hidden_category_id").value,
+    category_name: document.getElementById("category_name").value,
+    category_description: document.getElementById("category_description").value,
+    category_status: document.getElementById("category_status").value,
+    csrfmiddlewaretoken: commonGetCSRFToken(), // Include CSRF token
+  };
+
+  fetch("update_category", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRFToken": commonGetCSRFToken(), // Include CSRF token
     },
-  });
+    body: JSON.stringify(fetch_data),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        return response.json().then((errors) => {
+          throw errors;
+        });
+      }
+      return response.json();
+    })
+    .then((data) => {
+      document.getElementById("add_category_response").innerText = data.message;
+    })
+    .catch((errors) => {
+      for (let key in errors) {
+        if (errors.hasOwnProperty(key)) {
+          document.getElementById(`${key}_error`).textContent = errors[key];
+        }
+      }
+    });
 });
 
 // Reset for add category

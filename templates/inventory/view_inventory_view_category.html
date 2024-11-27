@@ -13,20 +13,20 @@
         <!-- Category List Table -->
         <div class="card">
             <div class="card-datatable table-responsive">
-                <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
+                <div id="Category_DataTables_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
                     
                     <div class="card-header d-flex flex-wrap py-0 flex-column flex-sm-row">
                         <div>
-                            <div id="DataTables_Table_0_filter" class="dataTables_filter me-3 mb-sm-6 mb-0 ps-0">
+                            <div id="Category_DataTables_filter" class="dataTables_filter me-3 mb-sm-6 mb-0 ps-0">
                                 <label>
-                                    <input type="search" class="form-control ms-0" id="search_category" placeholder="Search Category" aria-controls="DataTables_Table_0">
+                                    <input type="search" class="form-control ms-0" id="search_category" placeholder="Search Category" aria-controls="Category_DataTables">
                                 </label>
                             </div>
                         </div>
                         <div class="d-flex justify-content-center justify-content-md-end align-items-baseline">
                             <div class="dt-action-buttons d-flex justify-content-center flex-md-row align-items-baseline pt-0">
                                 <div class="dt-buttons btn-group flex-wrap">
-                                    <button class="btn btn-secondary add-new btn-primary ms-2" id="addCategoryList" tabindex="0" aria-controls="DataTables_Table_0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasEcommerceCategoryList">
+                                    <button class="btn btn-secondary add-new btn-primary ms-2" id="addCategoryList" tabindex="0" aria-controls="Category_DataTables" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasEcommerceCategoryList">
                                         <span>
                                             <i class="bx bx-plus bx-sm me-0 me-sm-2"></i>
                                             <span class="d-none d-sm-inline-block">Add Category</span>
@@ -38,13 +38,13 @@
                     </div>
                     
                     {% if category_list %}
-                    <table class="datatables-category-list table border-top dataTable no-footer dtr-column" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info" style="width: 1354px;">
+                    <table class="datatables-category-list table border-top dataTable no-footer dtr-column" id="Category_DataTables" aria-describedby="Category_DataTables_info" style="width: 1354px;">
                         <thead>
                             <tr>
                                 <th class="control sorting_disabled dtr-hidden" rowspan="1" colspan="1" style="width: 0px; display: none;" aria-label=""></th>
                                 </th>
-                                <th class="" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 662px;" aria-label="Categories: activate to sort column ascending">Categories</th>
-                                <th class="text-nowrap text-sm-center" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 185px;" aria-label="Total Products &amp;nbsp;: activate to sort column descending">Total Products &nbsp;</th>
+                                <th class="" tabindex="0" aria-controls="Category_DataTables" rowspan="1" colspan="1" style="width: 662px;" aria-label="Categories: activate to sort column ascending">Categories</th>
+                                <th class="text-nowrap text-sm-center" tabindex="0" aria-controls="Category_DataTables" rowspan="1" colspan="1" style="width: 185px;" aria-label="Total Products &amp;nbsp;: activate to sort column descending">Total Products &nbsp;</th>
                                 <th class="text-lg-center sorting_disabled" rowspan="1" colspan="1" style="width: 122px;" aria-label="Actions">Actions</th>
                             </tr>
                         </thead>
@@ -67,7 +67,7 @@
                                     </td>
                                     <td>
                                         <div class="d-flex align-items-sm-center justify-content-sm-center">
-                                            <button class="btn btn-icon">
+                                            <button id="editCategoryItem_{{ category.category_id }}" class="btn btn-icon categoryEdit-btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasEcommerceCategoryList" data-category-status="edit_mode">
                                                 <i class="bx bx-edit bx-md"></i>
                                             </button>
                                             <button class="btn btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown">

@@ -13,7 +13,7 @@ class InventoryCreateCategoryForm(forms.Form):
 
     def clean_category_name(self):
         category_name = self.cleaned_data.get('category_name')
-        print(f'-{category_name}-')
+
         if not category_name:
             raise forms.ValidationError('Category Name is required.')\
         
@@ -24,13 +24,13 @@ class InventoryCreateCategoryForm(forms.Form):
 
         return category_description
     
-    # def clean_category_status(self):
-    #     category_status = self.cleaned_data.get('category_status')
+    def clean_category_status(self):
+        category_status = self.cleaned_data.get('category_status')
 
-    #     if not category_status:
-    #         raise forms.ValidationError('Category Status is required.')
+        if not category_status:
+            raise forms.ValidationError('Category Status is required.')
         
-    #     return category_status
+        return category_status
     
 
     

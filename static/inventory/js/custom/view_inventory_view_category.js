@@ -3,6 +3,52 @@ $(document).ready(function () {
   $("#category_status").on("change", function () {
     category_status_label_toggle();
   });
+
+  $("#Category_DataTables").DataTable({
+    scrollY: "74vh",
+    scrollX: false,
+    paging: false,
+    searching: false,
+    info: false,
+  });
+
+  // Calling the get function to fetch the information of the selected category
+  $("#Category_DataTables").on("click", ".categoryEdit-btn", function () {
+    document.getElementById("submit_update_category").style.removeProperty("display");
+    document.getElementById("submit_add_category").style.setProperty("display", "none", "important");
+
+    var category_id = $(this).attr("id").split("_")[1];
+    document.getElementById("hidden_category_id").value = category_id;
+
+    fetch(`info_update_category?category_id=${category_id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": commonGetCSRFToken(), // Include CSRF token
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          return response.json().then((errors) => {
+            throw errors;
+          });
+        }
+        return response.json();
+      })
+      .then((data) => {
+        document.getElementById("category_name").value = data.category_name;
+        document.getElementById("category_description").value = data.category_description;
+
+        $("#category_status").select2("val", data.category_status);
+      })
+      .catch((errors) => {
+        for (let key in errors) {
+          if (errors.hasOwnProperty(key)) {
+            document.getElementById(`${key}_error`).textContent = errors[key];
+          }
+        }
+      });
+  });
 });
 
 function category_status_label_toggle() {
