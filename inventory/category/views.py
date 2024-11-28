@@ -24,6 +24,7 @@ def inventory_view_category(request):
             category['category_name'] = category_item['category_name']
             category['category_description'] = category_item['category_description']
             category['category_product_count'] = category_item['product_count']
+            category['category_status'] = category_item['category_status']
 
             res_category.append(category)
         
@@ -121,6 +122,28 @@ def inventory_update_category(request):
             else:
                 return JsonResponse(categoryForm.errors, status=400)
 
+
+    except Exception as ex:
+        print(ex)
+
+
+@Authentication.inventory_login_decorator
+def inventory_delete_category(request):
+    try:
+        if request.method == 'DELETE':
+            category_id = request.GET.get('category_id')
+            if not category_id:
+                pass
+
+            res_delete_category = model_delete_category(category_id)
+            if not res_delete_category:
+                raise Exception('Failed to delete category into database')
+
+            result = {}
+            result['message'] = 'Category Deleted Successfully!'
+
+            return JsonResponse(result, status=200)
+        
 
     except Exception as ex:
         print(ex)

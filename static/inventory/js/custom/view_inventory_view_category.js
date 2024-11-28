@@ -12,7 +12,7 @@ $(document).ready(function () {
     info: false,
   });
 
-  // Calling the get function to fetch the information of the selected category
+  // Calling the get function to fetch the information of the selected category for Edit
   $("#Category_DataTables").on("click", ".categoryEdit-btn", function () {
     document.getElementById("submit_update_category").style.removeProperty("display");
     document.getElementById("submit_add_category").style.setProperty("display", "none", "important");
@@ -36,6 +36,12 @@ $(document).ready(function () {
         return response.json();
       })
       .then((data) => {
+        const clearErrors = ["category_name_error", "category_description_error", "category_status_error"];
+
+        for (let index = 0; index < clearErrors.length; index++) {
+          document.getElementById(clearErrors[index]).textContent = "";
+        }
+
         document.getElementById("category_name").value = data.category_name;
         document.getElementById("category_description").value = data.category_description;
 
@@ -47,6 +53,48 @@ $(document).ready(function () {
             document.getElementById(`${key}_error`).textContent = errors[key];
           }
         }
+      });
+  });
+
+  // Calling the delete function to delete the specific record
+  $("#Category_DataTables").on("click", ".categoryDelete-btn", function () {
+    var category_id = $(this).attr("id").split("_")[1];
+
+    const toast_notification = document.getElementById("toastNotify");
+    const toast_body = document.querySelector(".toastNotify-body");
+
+    fetch(`delete_category?category_id=${category_id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": commonGetCSRFToken(), // Include CSRF token
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          return response.json().then((errors) => {
+            throw errors;
+          });
+        }
+        return response.json();
+      })
+      .then((data) => {
+        toast_body.innerHTML = data.message;
+        toast_notification.classList.add("bg-primary");
+
+        var toast = new bootstrap.Toast(toast_notification);
+        toast.show();
+
+        setTimeout(function () {
+          window.location.href = "";
+        }, 2000);
+      })
+      .catch((errors) => {
+        toast_body.innerHTML = errors.message;
+        toast_notification.classList.add("bg-primary");
+
+        var toast = new bootstrap.Toast(toast_notification);
+        toast.show();
       });
   });
 });

@@ -96,6 +96,19 @@
 
                     <!-- Main Content -->
                     <div class="content-wrapper">
+                        
+                        <!-- Toast Message Notification -->
+                        <div class="position-fixed bottom-0 end-0 p-2" style="z-index: 11">
+                            <div id="toastNotify" class="toast text-white border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                                <div class="d-flex">
+                                    <div class="toast-body toastNotify-body">
+                                    </div>
+                                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Toast Message Notification Ends -->
+
                         {% block main_logged_in_content %}{% endblock %}
             
                         <!-- Footer -->

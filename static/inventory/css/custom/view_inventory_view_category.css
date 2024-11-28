@@ -20,3 +20,21 @@ textarea {
 .card-datatable {
     overflow-x: hidden !important;
 }
+
+.categoryEdit-btn .bx-edit {
+    color: #7e80f4;
+}
+
+.categoryDelete-btn {
+
+    &:disabled {
+        border: none;
+    }
+
+    .bx-trash {
+        color: #e75f5f;
+    }
+}
+
+/* .categoryDelete-btn:disabled {
+} */

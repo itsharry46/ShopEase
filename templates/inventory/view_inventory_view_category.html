@@ -50,7 +50,13 @@
                         </thead>
                         <tbody>
                             {% for category in category_list %}
+                                
+                                {% if category.category_status == 'N'  %}
+                                <tr style="background-color: rgb(255 126 126 / 20%);">
+                                {% else %}
                                 <tr>
+                                {% endif %}
+
                                     <td class="  control" tabindex="0" style="display: none;"></td>
                                     <td class="">
                                         <div class="d-flex align-items-center">
@@ -70,13 +76,9 @@
                                             <button id="editCategoryItem_{{ category.category_id }}" class="btn btn-icon categoryEdit-btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasEcommerceCategoryList" data-category-status="edit_mode">
                                                 <i class="bx bx-edit bx-md"></i>
                                             </button>
-                                            <button class="btn btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                                <i class="bx bx-dots-vertical-rounded bx-md"></i>
+                                            <button id="deleteCategoryItem_{{ category.category_id }}" class="btn btn-icon dropdown-toggle hide-arrow categoryDelete-btn" {% if category.category_status == 'N' %}disabled{% endif %}>
+                                                <i class="bx bx-trash bx-md"></i>
                                             </button>
-                                            <div class="dropdown-menu dropdown-menu-end m-0">
-                                                <a href="javascript:0;" class="dropdown-item">View</a>
-                                                <a href="javascript:0;" class="dropdown-item">Suspend</a>
-                                            </div>
                                         </div>
                                     </td>
                                 </tr>
