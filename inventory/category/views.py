@@ -1,9 +1,16 @@
 import json
+import logging
 from .forms import *
 from .models import *
-from django.shortcuts import render, redirect
+from django.conf import settings
+from django.shortcuts import render
 from django.http import JsonResponse
 from common.utils import Authentication
+from shopease.settings import get_logging_config
+
+# Logger details
+settings.LOGGING = get_logging_config(__name__)
+logger = logging.getLogger(__name__)
 
 
 @Authentication.inventory_login_decorator
@@ -38,7 +45,7 @@ def inventory_view_category(request):
         return render(request, 'inventory/view_inventory_view_category.html', context)
 
     except Exception as ex:
-        print(ex)
+        logger.error(ex)
 
 @Authentication.inventory_login_decorator
 def inventory_add_category(request):
@@ -67,7 +74,7 @@ def inventory_add_category(request):
 
 
     except Exception as ex:
-        print(ex)
+        logger.error(ex)
 
 
 @Authentication.inventory_login_decorator
@@ -90,7 +97,7 @@ def inventory_info_update_category(request):
             return JsonResponse(result, status=200)
 
     except Exception as ex:
-        print(ex)
+        logger.error(ex)
         
 
 @Authentication.inventory_login_decorator
@@ -103,7 +110,7 @@ def inventory_update_category(request):
             if categoryForm.is_valid():
                 category_id = body.get('category_id')
                 if not category_id:
-                    pass
+                    raise Exception('Category ID is not present')
 
                 update_category = {}
                 update_category['category_name'] = categoryForm.cleaned_data.get('category_name')
@@ -124,7 +131,7 @@ def inventory_update_category(request):
 
 
     except Exception as ex:
-        print(ex)
+        logger.error(ex)
 
 
 @Authentication.inventory_login_decorator
@@ -133,7 +140,7 @@ def inventory_delete_category(request):
         if request.method == 'DELETE':
             category_id = request.GET.get('category_id')
             if not category_id:
-                pass
+                raise Exception('Category ID is not present')
 
             res_delete_category = model_delete_category(category_id)
             if not res_delete_category:
@@ -146,4 +153,4 @@ def inventory_delete_category(request):
         
 
     except Exception as ex:
-        print(ex)
+        logger.error(ex)

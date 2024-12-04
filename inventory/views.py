@@ -62,7 +62,7 @@ def inventory_login(request):
         return render(request, 'inventory/view_inventory_login.html', {'form': form})
 
     except Exception as ex:
-        print(ex)
+        logger.error(ex)
 
 
 def inventory_logout(request):
@@ -71,5 +71,5 @@ def inventory_logout(request):
         return redirect('inventory_login')
     
     except Exception as ex:
-        print(ex)
+        logger.error(ex)
 

@@ -1,6 +1,14 @@
+import logging
+from django.conf import settings
 from django.db import transaction
+from django.db.models import Count
+from shopease.settings import get_logging_config
+
 from common.models import Category
-from django.db.models import Count, Q
+
+# Logger details
+settings.LOGGING = get_logging_config(__name__)
+logger = logging.getLogger(__name__)
 
 
 def model_get_category_list():
@@ -16,7 +24,8 @@ def model_get_category_list():
         return queryset
 
     except Exception as ex:
-        print('model_get_category_list exception => ', ex)
+        err_message = 'model_get_category_list exception => ' + ex
+        logger.error(err_message)
 
 
 def model_add_category(add_category):
@@ -28,7 +37,8 @@ def model_add_category(add_category):
         return True
 
     except Exception as ex:
-        print('model_add_category exception => ', ex)
+        err_message = 'model_add_category exception => ' + ex
+        logger.error(err_message)
         return False
 
 
@@ -42,7 +52,9 @@ def model_update_category_information(category_id):
         return queryset
 
     except Exception as ex:
-        print('model_update_category_information', ex)
+        err_message = 'model_update_category_information' + ex
+        logger.error(err_message)
+
 
 def model_update_category(category_id, category_data):
     try:
@@ -56,7 +68,8 @@ def model_update_category(category_id, category_data):
                 raise Exception(f"Failed to update category id {category_id}")
 
     except Exception as ex:
-        print('model_update_category exception => ', ex)
+        err_message = 'model_update_category exception => ' + ex
+        print(err_message)
         return False
     
 
@@ -72,4 +85,5 @@ def model_delete_category(category_id):
                 raise Exception(f"Failed to delete category id {category_id}")
 
     except Exception as ex:
-        print('model_delete_category', ex)
+        err_message = 'model_delete_category' + ex
+        print(err_message)

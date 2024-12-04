@@ -20,6 +20,3 @@ class InventoryLoginForm(forms.Form):
             raise forms.ValidationError('Password is required.')
         
         return password
-
-
-    

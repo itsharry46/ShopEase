@@ -1,4 +1,12 @@
+import logging
+from django.conf import settings
+from shopease.settings import get_logging_config
+
 from common.models import User, Artifact
+
+# Logger details
+settings.LOGGING = get_logging_config(__name__)
+logger = logging.getLogger(__name__)
 
 
 def model_get_user_details(username, password):
@@ -13,7 +21,8 @@ def model_get_user_details(username, password):
         return queryset
     
     except Exception as ex:
-        print('model_get_user_details exception => ', ex)
+        ex_message = 'model_get_user_details exception => ' + ex
+        logger.error(ex_message)
 
 
 def model_get_user_artifacts(role_id):
@@ -21,11 +30,12 @@ def model_get_user_artifacts(role_id):
         query_set = Artifact.objects.filter(artifact_role_id = role_id, artifact_module_id__module_status = 'Y'). \
             select_related('artifact_module_id'). \
             values('artifact_module_id__module_id', 'artifact_module_id__module_name', 'artifact_module_id__module_icon', 'artifact_module_id__module_link', 'artifact_create_status', 'artifact_read_status', 'artifact_update_status', 'artifact_delete_status'). \
-            order_by('artifact_module_id__module_id')
+            order_by('artifact_order_id')
         
         query_set = query_set.all()
 
         return query_set
 
     except Exception as ex:
-        print('model_get_user_artifacts exception => ', ex)
+        ex_message = 'model_get_user_artifacts exception => ' + ex
+        logger.error(ex_message)
