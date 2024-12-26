@@ -1,0 +1,322 @@
+{% extends "inventory/view_main.html" %}
+{% load static %}
+
+{% block main_title %}Inventory | Add Category{% endblock %} 
+{% block main_css %}
+    <link rel="stylesheet" href="{% static "inventory/vendor/fonts/fontawsome.css" %}" />
+    <link rel="stylesheet" href="{% static "inventory/vendor/fonts/flag-icons.css" %}" />
+    <link rel="stylesheet" href="{% static "inventory/vendor/libs/typeahead-js/typeahead.css" %}" />
+
+    <link rel="stylesheet" href="{% static "inventory/css/custom/view_inventory_view_products.css" %}">
+{% endblock %}
+
+{% block main_logged_in_content %}
+<div class="container-xxl flex-grow-1 container-p-y">
+    <!-- Product List Widget -->
+    {% comment %} <div class="card mb-6">
+        <div class="card-widget-separator-wrapper">
+            <div class="card-body card-widget-separator">
+                <div class="row gy-4 gy-sm-1">
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="d-flex justify-content-between align-items-start card-widget-1 border-end pb-4 pb-sm-0">
+                            <div>
+                                <p class="mb-1">In-store Sales</p>
+                                <h4 class="mb-1">$5,345.43</h4>
+                                <p class="mb-0">
+                                    <span class="me-2">5k orders</span>
+                                    <span class="badge bg-label-success">+5.7%</span>
+                                </p>
+                            </div>
+                            <span class="avatar me-sm-6">
+                                <span class="avatar-initial rounded w-px-44 h-px-44">
+                                    <i class="bx bx-store-alt bx-sm text-heading"></i>
+                                </span>
+                            </span>
+                        </div>
+                        <hr class="d-none d-sm-block d-lg-none me-6">
+                    </div>
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="d-flex justify-content-between align-items-start card-widget-2 border-end pb-4 pb-sm-0">
+                            <div>
+                                <p class="mb-1">Website Sales</p>
+                                <h4 class="mb-1">$674,347.12</h4>
+                                <p class="mb-0">
+                                    <span class="me-2">21k orders</span>
+                                    <span class="badge bg-label-success">+12.4%</span>
+                                </p>
+                            </div>
+                            <span class="avatar p-2 me-lg-6">
+                                <span class="avatar-initial rounded w-px-44 h-px-44">
+                                    <i class="bx bx-laptop bx-sm text-heading"></i>
+                                </span>
+                            </span>
+                        </div>
+                        <hr class="d-none d-sm-block d-lg-none">
+                    </div>
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="d-flex justify-content-between align-items-start border-end pb-4 pb-sm-0 card-widget-3">
+                            <div>
+                                <p class="mb-1">Discount</p>
+                                <h4 class="mb-1">$14,235.12</h4>
+                                <p class="mb-0">6k orders</p>
+                            </div>
+                            <span class="avatar p-2 me-sm-6">
+                                <span class="avatar-initial rounded w-px-44 h-px-44">
+                                    <i class="bx bx-gift bx-sm text-heading"></i>
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <p class="mb-1">Affiliate</p>
+                                <h4 class="mb-1">$8,345.23</h4>
+                                <p class="mb-0">
+                                    <span class="me-2">150 orders</span>
+                                    <span class="badge bg-label-danger">-3.5%</span>
+                                </p>
+                            </div>
+                            <span class="avatar p-2">
+                                <span class="avatar-initial rounded w-px-44 h-px-44">
+                                    <i class="bx bx-wallet bx-sm text-heading"></i>
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> {% endcomment %}
+
+    <!-- Product List Table -->
+    <div class="card">
+        
+        <div class="card-header">
+            <form class="pt-0 fv-plugins-bootstrap5 fv-plugins-framework" id="productFilterForm" onsubmit="return true" novalidate="novalidate">
+                {% csrf_token %}
+
+                <div class="d-flex justify-content-between align-items-center row pt-4 gap-6 gap-md-0 g-md-6">
+                    
+                    <div class="col-md-4 form-group product_status">
+                        <select id="product_status" class="select2 form-select js-select" name="product_status" autofocus>
+                            {% for status in category_status %}
+                                <option value="{{ status.category_status_id }}" {% if status.category_status_id == filter_form.product_status.value %}selected{% endif %}>
+                                    {{ status.category_status }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <label id="category-status-label" for="category_status" class="" hidden>Category Status</label>
+                    </div>
+                    
+
+                    <div class="col-md-4 form-group product_category">
+                        <select id="product_category" class="select2 form-select js-select" name="product_category" autofocus>
+                            {% for category in category_list %}
+                                <option value="{{ category.category_id }}" {% if category.category_id == filter_form.product_category.value %}selected{% endif %}>
+                                    {{ category.category_name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <label id="product-category-label" for="product_category" class="" hidden>Category Name</label>
+                    </div>
+
+                    <div class="col-md-4 form-group product_stock_status">
+                        <select id="product_stock_status" class="select2 form-select js-select" name="product_stock_status" autofocus>
+                            {% for stock_status in category_stock_status %}
+                                <option value="{{ stock_status.stock_id }}" {% if stock_status.stock_id == filter_form.product_stock_status.value %}selected{% endif %}>
+                                    {{ stock_status.stock_status }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <label id="product-stock-status-label" for="product_stock_status" class="" hidden>Product Stock Status</label>
+                    </div>
+
+                </div>
+            </form>
+
+        </div>
+
+        <div class="card-datatable table-responsive">
+            <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
+                
+                <div class="card-header d-flex border-top rounded-0 flex-wrap py-0 flex-column flex-md-row align-items-start">
+                    <div class="me-5 ms-n4 pe-5 mb-n6 mb-md-0">
+                        <div id="DataTables_Table_0_filter" class="dataTables_filter">
+                            <label>
+                                <input type="search" class="form-control" placeholder="Search Product" aria-controls="DataTables_Table_0">
+                            </label>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-start justify-content-md-end align-items-baseline">
+                        <div class="dt-action-buttons d-flex flex-column align-items-start align-items-sm-center justify-content-sm-center pt-0 gap-sm-4 gap-sm-0 flex-sm-row">
+                            <div class="dt-buttons btn-group flex-wrap d-flex mb-6 mb-sm-0 mt-6">
+                                <div class="btn-group">
+                                    <button class="btn btn-secondary buttons-collection btn-label-secondary me-4" tabindex="0" aria-controls="DataTables_Table_0" type="button" aria-haspopup="dialog" aria-expanded="false">
+                                        <span><i class="bx bx-export me-2 bx-xs"></i>Export</span>
+                                    </button>
+                                </div>
+                                
+                                <button class="btn btn-secondary add-new btn-primary" tabindex="0" aria-controls="DataTables_Table_0" type="button">
+                                    <span>
+                                        <i class="bx bx-plus me-0 me-sm-1 bx-xs"></i>
+                                        <span class="d-none d-sm-inline-block">Add Product</span>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <table class="datatables-products table dataTable no-footer dtr-column" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info" style="width: 1355px;">
+                    <thead class="border-top">
+                        <tr>
+                            <th tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 423px;" aria-label="product: activate to sort column descending" aria-sort="ascending">product</th>
+                            <th tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 134px;" aria-label="category: activate to sort column ascending">category</th>
+                            <th tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 45px;" aria-label="sku: activate to sort column ascending">sku</th>
+                            <th tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 74px;" aria-label="price: activate to sort column ascending">price</th>
+                            <th tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 34px;" aria-label="qty: activate to sort column ascending">qty</th>
+                            <th tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 91px;" aria-label="status: activate to sort column ascending">status</th>
+                            <th rowspan="1" colspan="1" style="width: 91px;" aria-label="Actions">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for product_item in product_list %}
+                            <tr>
+                                <td>
+                                    <div class="d-flex justify-content-start align-items-center product-name">
+                                        <div class="d-flex flex-column">
+                                            <h6 class="text-nowrap mb-0">{{ product_item.product_name }}</h6>
+                                            <small class="text-truncate d-none d-sm-block">{{ product_item.product_description }}</small>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <span class="text-truncate d-flex align-items-center text-heading">
+                                        <span class="w-px-30 h-px-30 rounded-circle d-flex justify-content-center align-items-center bg-label-success me-4">
+                                            <i class="bx bx-walk bx-sm"></i>
+                                        </span>{{ product_item.product_category_name }}</span>
+                                </td>
+
+                                <td>
+                                    <span>{{ product_item.product_sku }}</span>
+                                </td>
+
+                                <td>
+                                    <span>{{ product_item.product_price }}</span>
+                                </td>
+
+                                <td>
+                                    <span>{{ product_item.product_quantity }}</span>
+                                </td>
+
+                                <td>
+                                    <span class="badge bg-label-danger" text-capitalized="">{{ product_item.product_status }}</span>
+                                </td>
+                                
+                                <td>
+                                    <div class="d-inline-block text-nowrap">
+                                        <button class="btn btn-icon">
+                                            <i class="bx bx-edit bx-md"></i>
+                                        </button>
+                                        <button class="btn btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                            <i class="bx bx-dots-vertical-rounded bx-md"></i>
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-end m-0">
+                                            <a href="javascript:0;" class="dropdown-item">View</a>
+                                            <a href="javascript:0;" class="dropdown-item">Suspend</a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+
+                            {% comment %} <td>
+                                <span class="text-truncate d-flex align-items-center text-heading">
+                                    <span class="w-px-30 h-px-30 rounded-circle d-flex justify-content-center align-items-center bg-label-success me-4">
+                                        <i class="bx bx-walk bx-sm"></i>
+                                    </span>Shoes </span>
+                            </td>
+                            <td>
+                                <span>31063</span>
+                            </td>
+                            <td>
+                                <span>$125</span>
+                            </td>
+                            <td>
+                                <span>942</span>
+                            </td>
+                            <td>
+                                <span class="badge bg-label-danger" text-capitalized="">Inactive</span>
+                            </td>
+                            <td>
+                                <div class="d-inline-block text-nowrap">
+                                    <button class="btn btn-icon">
+                                        <i class="bx bx-edit bx-md"></i>
+                                    </button>
+                                    <button class="btn btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                        <i class="bx bx-dots-vertical-rounded bx-md"></i>
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-end m-0">
+                                        <a href="javascript:0;" class="dropdown-item">View</a>
+                                        <a href="javascript:0;" class="dropdown-item">Suspend</a>
+                                    </div>
+                                </div>
+                            </td> {% endcomment %}
+                    </tbody>
+                </table>
+
+                <div class="row">
+                    <div class="col-sm-12 col-md-6">
+                        <div class="dataTables_info" id="DataTables_Table_0_info" role="status" aria-live="polite">Displaying 1 to 7 of 100 entries</div>
+                    </div>
+                    <div class="col-sm-12 col-md-6">
+                        <div class="dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate">
+                            <ul class="pagination">
+                                <li class="paginate_button page-item previous disabled" id="DataTables_Table_0_previous">
+                                    <a aria-controls="DataTables_Table_0" aria-disabled="true" role="link" data-dt-idx="previous" tabindex="-1" class="page-link">
+                                        <i class="bx bx-chevron-left bx-18px"></i>
+                                    </a>
+                                </li>
+                                <li class="paginate_button page-item active">
+                                    <a href="#" aria-controls="DataTables_Table_0" role="link" aria-current="page" data-dt-idx="0" tabindex="0" class="page-link">1</a>
+                                </li>
+                                <li class="paginate_button page-item ">
+                                    <a href="#" aria-controls="DataTables_Table_0" role="link" data-dt-idx="1" tabindex="0" class="page-link">2</a>
+                                </li>
+                                <li class="paginate_button page-item ">
+                                    <a href="#" aria-controls="DataTables_Table_0" role="link" data-dt-idx="2" tabindex="0" class="page-link">3</a>
+                                </li>
+                                <li class="paginate_button page-item ">
+                                    <a href="#" aria-controls="DataTables_Table_0" role="link" data-dt-idx="3" tabindex="0" class="page-link">4</a>
+                                </li>
+                                <li class="paginate_button page-item ">
+                                    <a href="#" aria-controls="DataTables_Table_0" role="link" data-dt-idx="4" tabindex="0" class="page-link">5</a>
+                                </li>
+                                <li class="paginate_button page-item disabled" id="DataTables_Table_0_ellipsis">
+                                    <a aria-controls="DataTables_Table_0" aria-disabled="true" role="link" data-dt-idx="ellipsis" tabindex="-1" class="page-link">…</a>
+                                </li>
+                                <li class="paginate_button page-item ">
+                                    <a href="#" aria-controls="DataTables_Table_0" role="link" data-dt-idx="14" tabindex="0" class="page-link">15</a>
+                                </li>
+                                <li class="paginate_button page-item next" id="DataTables_Table_0_next">
+                                    <a href="#" aria-controls="DataTables_Table_0" role="link" data-dt-idx="next" tabindex="0" class="page-link">
+                                        <i class="bx bx-chevron-right bx-18px"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div style="width: 1%;"></div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block main_page_js %}
+<script src="{% static "inventory/js/custom/view_inventory_view_products.js" %}"></script>
+{% endblock %}

@@ -1,12 +1,8 @@
-import logging
-from django.conf import settings
 from django.shortcuts import render
-from common.utils import Authentication
-from shopease.settings import get_logging_config
+from common.utils import Authentication, CustomLogging
 
 # Logger details
-settings.LOGGING = get_logging_config(__name__)
-logger = logging.getLogger(__name__)
+logger = CustomLogging.setup_logger(__name__)
 
 
 @Authentication.inventory_login_decorator

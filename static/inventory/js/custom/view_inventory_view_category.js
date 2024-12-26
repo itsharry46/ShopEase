@@ -155,29 +155,3 @@ $(function () {
       },
     }));
 });
-
-/* Custom Code Starts Here */
-document.getElementById("search_category").addEventListener("keyup", function () {
-  // Get the value of the search input
-  const searchTerm = this.value.toLowerCase();
-  const rows = document.querySelectorAll("#DataTables_Table_0 tbody tr");
-
-  rows.forEach((row) => {
-    // Get the text content of each cell in the current row
-    const cells = row.getElementsByTagName("td");
-
-    let rowVisible = false;
-
-    // Check if any cell contains the search term
-    for (let i = 0; i < cells.length; i++) {
-      const cell = cells[i];
-      if (cell.textContent.toLowerCase().indexOf(searchTerm) > -1) {
-        rowVisible = true;
-        break; // If a match is found, no need to check further
-      }
-    }
-
-    // Show or hide the row based on the search term
-    row.style.display = rowVisible ? "" : "none";
-  });
-});

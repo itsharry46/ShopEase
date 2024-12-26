@@ -1,14 +1,11 @@
 import hashlib
-import logging
 from .forms import *
 from .models import *
-from django.conf import settings
+from common.utils import CustomLogging
 from django.shortcuts import render, redirect
-from shopease.settings import get_logging_config
 
 # Logger details
-settings.LOGGING = get_logging_config(__name__)
-logger = logging.getLogger(__name__)
+logger = CustomLogging.setup_logger(__name__)
 
 
 def inventory_login(request):

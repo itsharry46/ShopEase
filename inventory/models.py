@@ -1,12 +1,9 @@
-import logging
-from django.conf import settings
-from shopease.settings import get_logging_config
+from common.utils import CustomLogging
 
 from common.models import User, Artifact
 
 # Logger details
-settings.LOGGING = get_logging_config(__name__)
-logger = logging.getLogger(__name__)
+logger = CustomLogging.setup_logger(__name__)
 
 
 def model_get_user_details(username, password):

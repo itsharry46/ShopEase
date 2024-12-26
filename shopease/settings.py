@@ -137,53 +137,6 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Logger Configurations
-def get_logging_config(module_name): 
-    # Get the current date and time
-    current_datetime = datetime.now()
-
-    # Extract the day, month, and year
-    current_day = current_datetime.strftime('%d')
-    current_month = current_datetime.strftime('%m')
-    current_year = current_datetime.strftime('%Y')
-
-    LOG_DIR = os.path.join(BASE_DIR, f"log/{current_year}/{current_month}/{current_day}")
-    if not os.path.exists(LOG_DIR):
-        os.makedirs(LOG_DIR)
-
-    return {
-        "version": 1,
-        "disable_existing_loggers": True,
-        "formatters": {
-            "verbose": {
-                "format": "{levelname} {asctime} {module} {lineno} {message}",
-                "style": "{",
-            }
-        },
-        "filters": {
-            "require_debug_true": {
-                "()": "django.utils.log.RequireDebugTrue",
-            }
-        },
-        "handlers": {
-            "django": {
-                "level": "DEBUG",
-                "filters": ["require_debug_true"],
-                "class": "logging.handlers.RotatingFileHandler",
-                "formatter": "verbose",
-                "filename": os.path.join(BASE_DIR, f"{LOG_DIR}/{module_name}.log"),
-                "maxBytes": 10 * 1024 * 1024,    # Max 10 MB
-                "encoding": "utf-8"
-            }
-        },
-        "loggers": {
-            module_name : {
-                "handlers": ["django"],
-                "propagate": True,
-            }
-        },
-    }
-
 
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True

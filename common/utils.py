@@ -1,4 +1,8 @@
+import os
+import logging.config
+from datetime import datetime
 from django.shortcuts import redirect
+
 
 class Authentication:
 
@@ -16,3 +20,70 @@ class Authentication:
             return redirect('inventory_logout')
         
         return _wrapper_view
+    
+
+class CustomLogging:
+    
+    @staticmethod
+    def get_logging_config(module_name):
+        """
+        Returns a dictionary for logging configuration based on the module name.
+        """
+        # Base directory for logs
+        BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+        # Get the current date
+        current_datetime = datetime.now()
+        current_day = current_datetime.strftime('%d')
+        current_month = current_datetime.strftime('%m')
+        current_year = current_datetime.strftime('%Y')
+
+        # Create directory structure for logs
+        LOG_DIR = os.path.join(BASE_DIR, f"log/{current_year}/{current_month}/{current_day}")
+        if not os.path.exists(LOG_DIR):
+            os.makedirs(LOG_DIR)
+
+        return {
+            "version": 1,
+            "disable_existing_loggers": True,
+            "formatters": {
+                "verbose": {
+                    "format": "{levelname} {asctime} {module} {lineno} {message}",
+                    "style": "{",
+                }
+            },
+            "filters": {
+                "require_debug_true": {
+                    "()": "django.utils.log.RequireDebugTrue",
+                }
+            },
+            "handlers": {
+                "django": {
+                    "level": "DEBUG",
+                    "filters": ["require_debug_true"],
+                    "class": "logging.handlers.RotatingFileHandler",
+                    "formatter": "verbose",
+                    "filename": os.path.join(LOG_DIR, f"{module_name}.log"),
+                    "maxBytes": 10 * 1024 * 1024,    # Max 10 MB
+                    "backupCount": 5,                # Keep up to 5 old log files
+                    "encoding": "utf-8",
+                }
+            },
+            "loggers": {
+                module_name: {
+                    "handlers": ["django"],
+                    "level": "DEBUG",
+                    "propagate": True,
+                }
+            },
+        }
+
+
+    @staticmethod
+    def setup_logger(module_name):
+        """
+        Configures the logger for a specific module.
+        Returns a logger instance.
+        """
+        logging.config.dictConfig(CustomLogging.get_logging_config(module_name))
+        return logging.getLogger(module_name)
