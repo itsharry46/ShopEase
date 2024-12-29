@@ -181,7 +181,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for product_item in product_list %}
+                        {% for product_item in products.product_list %}
                             <tr>
                                 <td>
                                     <div class="d-flex justify-content-start align-items-center product-name">
@@ -231,80 +231,51 @@
                                 </td>
                             </tr>
                         {% endfor %}
-
-                            {% comment %} <td>
-                                <span class="text-truncate d-flex align-items-center text-heading">
-                                    <span class="w-px-30 h-px-30 rounded-circle d-flex justify-content-center align-items-center bg-label-success me-4">
-                                        <i class="bx bx-walk bx-sm"></i>
-                                    </span>Shoes </span>
-                            </td>
-                            <td>
-                                <span>31063</span>
-                            </td>
-                            <td>
-                                <span>$125</span>
-                            </td>
-                            <td>
-                                <span>942</span>
-                            </td>
-                            <td>
-                                <span class="badge bg-label-danger" text-capitalized="">Inactive</span>
-                            </td>
-                            <td>
-                                <div class="d-inline-block text-nowrap">
-                                    <button class="btn btn-icon">
-                                        <i class="bx bx-edit bx-md"></i>
-                                    </button>
-                                    <button class="btn btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                        <i class="bx bx-dots-vertical-rounded bx-md"></i>
-                                    </button>
-                                    <div class="dropdown-menu dropdown-menu-end m-0">
-                                        <a href="javascript:0;" class="dropdown-item">View</a>
-                                        <a href="javascript:0;" class="dropdown-item">Suspend</a>
-                                    </div>
-                                </div>
-                            </td> {% endcomment %}
                     </tbody>
                 </table>
 
                 <div class="row">
                     <div class="col-sm-12 col-md-6">
-                        <div class="dataTables_info" id="DataTables_Table_0_info" role="status" aria-live="polite">Displaying 1 to 7 of 100 entries</div>
+                        <div class="dataTables_info" id="DataTables_Table_0_info" role="status" aria-live="polite">Displaying {{ products.product_obj.start_index }} to {{ products.product_obj.end_index }} of {{ products.product_count }} entries</div>
                     </div>
                     <div class="col-sm-12 col-md-6">
                         <div class="dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate">
                             <ul class="pagination">
-                                <li class="paginate_button page-item previous disabled" id="DataTables_Table_0_previous">
-                                    <a aria-controls="DataTables_Table_0" aria-disabled="true" role="link" data-dt-idx="previous" tabindex="-1" class="page-link">
-                                        <i class="bx bx-chevron-left bx-18px"></i>
-                                    </a>
-                                </li>
-                                <li class="paginate_button page-item active">
-                                    <a href="#" aria-controls="DataTables_Table_0" role="link" aria-current="page" data-dt-idx="0" tabindex="0" class="page-link">1</a>
-                                </li>
-                                <li class="paginate_button page-item ">
-                                    <a href="#" aria-controls="DataTables_Table_0" role="link" data-dt-idx="1" tabindex="0" class="page-link">2</a>
-                                </li>
-                                <li class="paginate_button page-item ">
-                                    <a href="#" aria-controls="DataTables_Table_0" role="link" data-dt-idx="2" tabindex="0" class="page-link">3</a>
-                                </li>
-                                <li class="paginate_button page-item ">
-                                    <a href="#" aria-controls="DataTables_Table_0" role="link" data-dt-idx="3" tabindex="0" class="page-link">4</a>
-                                </li>
-                                <li class="paginate_button page-item ">
-                                    <a href="#" aria-controls="DataTables_Table_0" role="link" data-dt-idx="4" tabindex="0" class="page-link">5</a>
-                                </li>
-                                <li class="paginate_button page-item disabled" id="DataTables_Table_0_ellipsis">
-                                    <a aria-controls="DataTables_Table_0" aria-disabled="true" role="link" data-dt-idx="ellipsis" tabindex="-1" class="page-link">…</a>
-                                </li>
-                                <li class="paginate_button page-item ">
-                                    <a href="#" aria-controls="DataTables_Table_0" role="link" data-dt-idx="14" tabindex="0" class="page-link">15</a>
-                                </li>
-                                <li class="paginate_button page-item next" id="DataTables_Table_0_next">
-                                    <a href="#" aria-controls="DataTables_Table_0" role="link" data-dt-idx="next" tabindex="0" class="page-link">
-                                        <i class="bx bx-chevron-right bx-18px"></i>
-                                    </a>
-                                </li>
+                                
+                                {% if products.product_obj.has_previous %}
+                                    <li class="paginate_button page-item previous">
+                                        <a href="?page={{ products.product_obj.previous_page_number }}" tabindex="-1" class="page-link">
+                                            <i class="bx bx-chevron-left bx-18px"></i>
+                                        </a>
+                                    </li>
+                                {% else %}
+                                    <li class="paginate_button page-item previous disabled">
+                                        <a tabindex="-1" class="page-link">
+                                            <i class="bx bx-chevron-left bx-18px"></i>
+                                        </a>
+                                    </li>
+                                {% endif %}
+
+                                {% for page_num in products.product_obj.paginator.page_range %}
+                                    <li class="paginate_button {% if page_num == products.product_obj.number %}active{% endif %} page-item">
+                                        <a href="?page={{ page_num }}" tabindex="0" class="page-link">{{ page_num }}</a>
+                                    </li>
+                                {% endfor %}
+
+                                {% if products.product_obj.has_next %}
+                                    <li class="paginate_button page-item next">
+                                        <a href="?page={{ products.product_obj.next_page_number }}" tabindex="0" class="page-link">
+                                            <i class="bx bx-chevron-right bx-18px"></i>
+                                        </a>
+                                    </li>
+                                {% else %}
+                                    <li class="paginate_button page-item next disabled">
+                                        <a tabindex="0" class="page-link">
+                                            <i class="bx bx-chevron-right bx-18px"></i>
+                                        </a>
+                                    </li>
+                                {% endif %}
+
                             </ul>
                         </div>
                     </div>

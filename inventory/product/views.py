@@ -2,6 +2,7 @@ from .forms import *
 from .models import *
 from django.shortcuts import render
 from common.utils import Authentication, CustomLogging
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 # Logger details
 logger = CustomLogging.setup_logger(__name__)
@@ -10,6 +11,12 @@ logger = CustomLogging.setup_logger(__name__)
 @Authentication.inventory_login_decorator
 def inventory_view_products(request):
     try:
+        # Pagination Code
+        page_number = request.GET.get('page', 1)
+        per_page = 10
+        offset = (int(page_number) - 1) * per_page
+        limit = offset + per_page
+
         context = {}
         context['active_menu_item'] = 'Product Listing'
 
@@ -38,7 +45,7 @@ def inventory_view_products(request):
         category_stock.append({'stock_id': 'N', 'stock_status': 'Out Of Stock'})
         context['category_stock_status'] = category_stock
 
-        product_list = model_get_product_list(10, 30)
+        product_list = model_get_product_list(offset, limit)
         res_products = []
         for items in product_list['data_item']:
             product = {}
@@ -54,7 +61,19 @@ def inventory_view_products(request):
 
             res_products.append(product)
 
-        context['product_list'] = res_products
+        paginator = Paginator(range(product_list['data_count']), per_page)
+        try:
+            page_obj = paginator.page(page_number)
+        except PageNotAnInteger:
+            page_obj = paginator.page(1)
+        except EmptyPage:
+            page_obj = paginator.page(paginator.num_pages)
+
+
+        context['products'] = {}
+        context['products']['product_list'] = res_products
+        context['products']['product_obj'] = page_obj
+        context['products']['product_count'] = product_list['data_count']
 
         return render(request, 'inventory/view_inventory_view_products.html', context)
 
