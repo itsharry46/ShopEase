@@ -1,6 +1,8 @@
 import os
+import base64
 import logging.config
 from datetime import datetime
+from urllib.parse import parse_qs
 from django.shortcuts import redirect
 
 
@@ -87,3 +89,15 @@ class CustomLogging:
         """
         logging.config.dictConfig(CustomLogging.get_logging_config(module_name))
         return logging.getLogger(module_name)
+    
+
+class Cryptography:
+
+    @staticmethod
+    def query_param_decryption(encoded_key):
+        # Decode the Base64 string
+        decoded_bytes = base64.b64decode(encoded_key)
+        # Convert the decoded bytes back to string (assuming UTF-8 encoding)
+        decoded_string = decoded_bytes.decode('utf-8')
+
+        return parse_qs(decoded_string)

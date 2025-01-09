@@ -24,11 +24,23 @@ def model_get_category_list():
         logger.error(err_message)
 
 
-def model_get_product_list(offset, limit):
+def model_get_product_list(offset, limit, filters):
     try:
-        base_queryset = Product.objects.filter(product_category_id__category_status = 'Y'). \
-            select_related('product_category_id')
+        base_queryset = Product.objects.select_related('product_category_id')
+
+        # Filters
+        if filters['category_status'] != 'None':
+            base_queryset = base_queryset.filter(product_category_id__category_status = filters['category_status'])
+
+        if filters['product_category'] != 'None':
+            base_queryset = base_queryset.filter(product_category_id = filters['product_category'])
+
+        if filters['product_stock_status'] != 'None':
+            base_queryset = base_queryset.filter(product_status = filters['product_stock_status'])
         
+        if filters['search_product']:
+            base_queryset = base_queryset.filter(product_name__icontains = filters['search_product'])
+
         # Getting total records
         queryset_count = base_queryset.count()
 
