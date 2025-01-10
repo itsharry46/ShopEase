@@ -45,8 +45,11 @@ def model_get_product_list(offset, limit, filters):
         queryset_count = base_queryset.count()
 
         # Get paginated results
-        queryset = (base_queryset.values('product_id', 'product_name', 'product_description', 'product_category_id__category_id', 'product_category_id__category_name', 'product_sku', 'product_discount_price', 'product_stock', 'product_status'). \
-            order_by('-product_id')[offset:limit])
+        queryset = base_queryset.values('product_id', 'product_name', 'product_description', 'product_category_id__category_id', 'product_category_id__category_name', 'product_sku', 'product_discount_price', 'product_stock', 'product_status'). \
+            order_by('-product_id')
+        
+        if offset is not None and limit is not None:
+            queryset = queryset[offset:limit]
         
         queryset = queryset.all()
 

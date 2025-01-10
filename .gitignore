@@ -160,4 +160,5 @@ cython_debug/
 #.idea/
 
 # Custom Ignore
-log/*.*
+# log/*.*
+static/assets/exports/*.*

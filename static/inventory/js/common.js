@@ -8,3 +8,12 @@ function commonGetCSRFToken() {
   }
   return null;
 }
+
+function commonDownloadFile(file_url) {
+  const a = document.createElement("a");
+  a.href = file_url;
+  a.download = file_url.split("/").pop();
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}

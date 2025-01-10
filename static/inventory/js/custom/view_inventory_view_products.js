@@ -225,3 +225,56 @@ const addProducts = document.getElementById("add_products");
 addProducts.addEventListener("click", function () {
   window.location.href = "add_products";
 });
+
+// Export Products
+const exportProducts = document.getElementById("export_products");
+exportProducts.addEventListener("click", function () {
+  export_product_listing();
+});
+async function export_product_listing() {
+  const toast_notification = document.getElementById("toastNotify");
+  const toast_body = document.querySelector(".toastNotify-body");
+
+  var fetch_data = {
+    category_status: document.getElementById("category_status").value,
+    product_category: document.getElementById("product_category").value,
+    product_stock_status: document.getElementById("product_stock_status").value,
+    search_product: document.getElementById("search_product").value,
+  };
+
+  fetch("inventory_view_products_export_fetch", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRFToken": commonGetCSRFToken(), // Include CSRF token
+    },
+    body: JSON.stringify(fetch_data),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        return response.json().then((errors) => {
+          throw errors;
+        });
+      }
+      return response.json();
+    })
+    .then((data) => {
+      toast_body.innerHTML = data.res_message;
+      toast_notification.classList.add("bg-primary");
+
+      var toast = new bootstrap.Toast(toast_notification);
+      toast.show();
+
+      setTimeout(function () {
+        const file_url = "/static/assets/exports/" + data.res_fileName + ".csv";
+        commonDownloadFile(file_url);
+      }, 2000);
+    })
+    .catch((errors) => {
+      toast_body.innerHTML = errors.message;
+      toast_notification.classList.add("bg-primary");
+
+      var toast = new bootstrap.Toast(toast_notification);
+      toast.show();
+    });
+}

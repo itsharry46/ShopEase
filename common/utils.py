@@ -1,7 +1,9 @@
 import os
 import base64
+import pandas as pd
 import logging.config
 from datetime import datetime
+from django.conf import settings
 from urllib.parse import parse_qs
 from django.shortcuts import redirect
 
@@ -101,3 +103,38 @@ class Cryptography:
         decoded_string = decoded_bytes.decode('utf-8')
 
         return parse_qs(decoded_string)
+    
+
+class ExcelOperations:
+
+    @staticmethod
+    def export_data_to_csv_format(export_data, column_names, filename):
+        try:
+            # creating dataframe for excel
+            data_frame = pd.DataFrame(export_data)
+            
+            # Checking if the data matches the column names
+            if len(data_frame.columns) != len(column_names):
+                raise ValueError("Number of columns in the data does not match the column names provided.")
+
+            # Assigning new column names
+            data_frame.columns = column_names
+
+            # Saving dataframe to CSV
+            csv_file_path = os.path.join(settings.STATIC_URL.lstrip('/'), 'assets/exports', filename + '.csv')
+            print(csv_file_path)
+            data_frame.to_csv(csv_file_path, index=False)
+
+            return {"res_status": True, "res_message": "Data exported succcessfully.", "res_fileName": filename}
+        
+        except FileNotFoundError:
+            return {"res_status": False, "res_message": "Error: The file path is invalid or not writable."}
+
+        except PermissionError:
+            return {"res_status": False, "res_message": "Error: Permission denied when trying to write to the file."}
+
+        except ValueError as ve:
+            return {"res_status": False, "res_message": f"Error: {ve}"}
+            
+        except Exception as e:
+            return {"res_status": False, "res_message": f"An unexpected error occurred: {e}"}

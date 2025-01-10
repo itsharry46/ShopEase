@@ -1,10 +1,12 @@
+import json
 import math
 from .forms import *
 from .models import *
+from datetime import datetime
 from django.shortcuts import render
 from django.http import JsonResponse
-from common.utils import Authentication, CustomLogging, Cryptography
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from common.utils import Authentication, CustomLogging, Cryptography, ExcelOperations
 
 # Logger details
 logger = CustomLogging.setup_logger(__name__)
@@ -124,6 +126,58 @@ def inventory_view_products_fetch(request):
 
             return JsonResponse(result, status=200)
         
+        res_error = {}
+        res_error['message'] = 'Wrong method has been envoked'
+        
+        return JsonResponse(res_error, status=400)
+
+    except Exception as ex:
+        logger.error(ex)
+
+
+@Authentication.inventory_login_decorator
+def inventory_view_products_export_fetch(request):
+    try:
+        if request.method == 'POST':
+            body = json.loads(request.body)
+
+            filters = {}
+            filters['category_status'] = body.get('category_status')
+            filters['product_category'] = body.get('product_category')
+            filters['product_stock_status'] = body.get('product_stock_status')
+            filters['search_product'] = body.get('search_product', None)
+
+            product_list = model_get_product_list(None, None, filters)
+            
+            excel_data = []
+            for data in product_list['data_item']:
+                product_item = {}
+                product_item['Product ID'] = data['product_id']
+                product_item['Product Name'] = data['product_name']
+                product_item['Product Description'] = data['product_description']
+                product_item['Product Category Name'] = data['product_category_id__category_name']
+                product_item['Product SKU'] = data['product_sku']
+                product_item['Product Discount Price'] = data['product_discount_price']
+                product_item['Product Stock'] = data['product_stock']
+                product_item['Product Status'] = "Active" if data['product_status'] == 'Y' else "Inactive"
+
+                excel_data.append(product_item)
+
+            column_names = ['Product ID', 'Product Name', 'Product Description', 'Product Category Name', 'Product SKU', 'Product Discount Price', 'Product Stock', 'Product Status']
+
+            file_name = f'export_product_listing_{datetime.now().strftime("%Y_%m_%d_%H%M%S")}'
+
+            result = ExcelOperations.export_data_to_csv_format(excel_data, column_names, file_name)
+            if result['res_status'] == False:
+
+                res_error = {}
+                res_error['message'] = result['res_message']
+                
+                return JsonResponse(res_error, status=400)
+            
+            else:
+                return JsonResponse(result, status=200)
+
         res_error = {}
         res_error['message'] = 'Wrong method has been envoked'
         
