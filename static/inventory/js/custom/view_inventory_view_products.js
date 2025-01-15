@@ -61,7 +61,7 @@ $(function () {
 // Product Filters
 const searchProductInputBox = document.getElementById("search_product");
 searchProductInputBox.addEventListener("keydown", function (event) {
-  if (event.key === "Enter" && searchProductInputBox.value != "") {
+  if (event.key === "Enter") {
     product_listing_filter_fetch();
   }
 });

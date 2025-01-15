@@ -37,7 +37,7 @@
                         </div>
                     </div>
                     
-                    {% if category_list %}
+                    
                     <table class="datatables-category-list table border-top dataTable no-footer dtr-column" id="Category_DataTables" aria-describedby="Category_DataTables_info" style="width: 1354px;">
                         <thead>
                             <tr>
@@ -48,44 +48,11 @@
                                 <th class="text-lg-center sorting_disabled" rowspan="1" colspan="1" style="width: 122px;" aria-label="Actions">Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            {% for category in category_list %}
-                                
-                                {% if category.category_status == 'N'  %}
-                                <tr style="background-color: rgb(255 126 126 / 20%);">
-                                {% else %}
-                                <tr>
-                                {% endif %}
-
-                                    <td class="  control" tabindex="0" style="display: none;"></td>
-                                    <td class="">
-                                        <div class="d-flex align-items-center">
-                                            <div class="d-flex flex-column justify-content-center">
-                                                <span class="text-heading text-wrap fw-medium">{{ category.category_name }}</span>
-                                                <span class="text-truncate mb-0 d-none d-sm-block">
-                                                    <small>{{ category.category_description }}</small>
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="sorting_1">
-                                        <div class="text-sm-center">{{ category.category_product_count }}</div>
-                                    </td>
-                                    <td>
-                                        <div class="d-flex align-items-sm-center justify-content-sm-center">
-                                            <button id="editCategoryItem_{{ category.category_id }}" class="btn btn-icon categoryEdit-btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasEcommerceCategoryList" data-category-status="edit_mode">
-                                                <i class="bx bx-edit bx-md"></i>
-                                            </button>
-                                            <button id="deleteCategoryItem_{{ category.category_id }}" class="btn btn-icon dropdown-toggle hide-arrow categoryDelete-btn" {% if category.category_status == 'N' %}disabled{% endif %}>
-                                                <i class="bx bx-trash bx-md"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            {% endfor %}
+                        <tbody id="category-listing-table">
+                            <!-- Table Items will be displayed here -->
                         </tbody>
                     </table>
-                    {% endif %}
+                    
 
                     {% if category_list_err %}
                         <hr>

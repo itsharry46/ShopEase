@@ -8,13 +8,16 @@ from common.models import Category
 logger = CustomLogging.setup_logger(__name__)
 
 
-def model_get_category_list():
+def model_get_category_list(filters):
     try:
         queryset = Category.objects. \
             annotate(product_count=Count('product__product_id')). \
             select_related('product_category_id'). \
             values('category_id', 'category_name', 'category_description', 'product_count', 'category_status'). \
             order_by('category_status')
+        
+        if filters['search_category']:
+            queryset = queryset.filter(category_name__icontains = filters['search_category'])
         
         queryset = queryset.all()
 

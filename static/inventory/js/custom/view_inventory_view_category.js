@@ -155,3 +155,84 @@ $(function () {
       },
     }));
 });
+
+const searchCategoryInputBox = document.getElementById("search_category");
+searchCategoryInputBox.addEventListener("keydown", function (event) {
+  if (event.key === "Enter") {
+    category_listing_fetch();
+  }
+});
+
+const categoryListingTableBody = document.getElementById("category-listing-table");
+async function category_listing_fetch() {
+  params = {
+    search_category: document.getElementById("search_category").value,
+  };
+  let query_params = new URLSearchParams(params).toString();
+  query_params = "query_params=" + btoa(query_params);
+
+  fetch(`inventory_view_category_fetch?${query_params}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => {
+      if (!response.ok) {
+        return response.json().then((errors) => {
+          throw errors;
+        });
+      }
+      return response.json();
+    })
+    .then((data) => {
+      // Table Items
+      const category_table_item = data.category_list;
+      categoryListingTableBody.innerHTML = "";
+      category_table_item.forEach((category_table_item) => {
+        const row = `
+                    ${category_table_item.category_status == "N" ? '<tr style="background-color: rgb(255 126 126 / 20%);">' : "<tr>"}
+
+                      <td class="  control" tabindex="0" style="display: none;"></td>
+                        <td class="">
+                          <div class="d-flex align-items-center">
+                            <div class="d-flex flex-column justify-content-center">
+                              <span class="text-heading text-wrap fw-medium">${category_table_item.category_name}</span>
+                              <span class="text-truncate mb-0 d-none d-sm-block">
+                              <small>${category_table_item.category_description}</small>
+                              </span>
+                            </div>
+                          </div>
+                        </td>
+
+                        <td class="sorting_1">
+                            <div class="text-sm-center">${category_table_item.category_product_count}</div>
+                        </td>
+              
+                        <td>
+                          <div class="d-flex align-items-sm-center justify-content-sm-center">
+                              <button id="editCategoryItem_${
+                                category_table_item.category_id
+                              }" class="btn btn-icon categoryEdit-btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasEcommerceCategoryList" data-category-status="edit_mode">
+                                  <i class="bx bx-edit bx-md"></i>
+                              </button>
+                              <button id="deleteCategoryItem_${
+                                category_table_item.category_id
+                              }" class="btn btn-icon dropdown-toggle hide-arrow categoryDelete-btn" ${
+          category_table_item.category_status == "N" ? "disabled" : ""
+        } >
+                                  <i class="bx bx-trash bx-md"></i>
+                              </button>
+                          </div>
+                        </td>
+
+                    </tr>
+                `;
+        categoryListingTableBody.innerHTML += row;
+      });
+    })
+    .catch((errors) => {
+      console.log(errors);
+    });
+}
+document.addEventListener("DOMContentLoaded", category_listing_fetch());
